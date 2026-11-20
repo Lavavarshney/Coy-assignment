@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, useMotionValue, useTransform, PanInfo } from 'framer-motion';
+import { motion, useMotionValue, useTransform, PanInfo, animate } from 'framer-motion';
 import { MapPin, Heart, X, Sparkles, Music, Info, GraduationCap, ChevronDown } from 'lucide-react';
 import { Profile } from '../types';
 
@@ -14,27 +14,41 @@ interface SwipeCardProps {
 export const SwipeCard: React.FC<SwipeCardProps> = ({ profile, isFront, onSwipe }) => {
   const [photoIndex, setPhotoIndex] = useState(0);
   const [showDetails, setShowDetails] = useState(false);
-  const [swiped, setSwiped] = useState(false);
+  const [isDismissing, setIsDismissing] = useState(false);
 
   const x = useMotionValue(0);
-  const rotate = useTransform(x, [-250, 250], [-25, 25]);
+  const rotate = useTransform(x, [-300, 300], [-22, 22]);
 
-  // Visual opacity of the stamps
-  const likeOpacity = useTransform(x, [15, 90], [0, 1]);
-  const passOpacity = useTransform(x, [-90, -15], [1, 0]);
+  // Smooth stamp opacity interpolation
+  const likeOpacity = useTransform(x, [20, 100], [0, 1]);
+  const passOpacity = useTransform(x, [-100, -20], [1, 0]);
+
+  const flyOut = async (direction: 'like' | 'pass') => {
+    setIsDismissing(true);
+    const targetX = direction === 'like' ? 600 : -600;
+
+    // Smooth physical flyout animation
+    await animate(x, targetX, {
+      duration: 0.28,
+      ease: [0.32, 0.72, 0, 1],
+    });
+
+    onSwipe(direction);
+  };
 
   const handleDragEnd = (_: any, info: PanInfo) => {
-    if (showDetails || swiped) return;
+    if (showDetails || isDismissing) return;
 
-    const swipeThreshold = 75;
-    const velocityThreshold = 250;
+    const swipeThreshold = 80;
+    const velocityThreshold = 350;
 
     if (info.offset.x > swipeThreshold || info.velocity.x > velocityThreshold) {
-      setSwiped(true);
-      onSwipe('like');
+      flyOut('like');
     } else if (info.offset.x < -swipeThreshold || info.velocity.x < -velocityThreshold) {
-      setSwiped(true);
-      onSwipe('pass');
+      flyOut('pass');
+    } else {
+      // Spring smoothly back to center
+      animate(x, 0, { type: 'spring', stiffness: 500, damping: 30 });
     }
   };
 
@@ -42,7 +56,12 @@ export const SwipeCard: React.FC<SwipeCardProps> = ({ profile, isFront, onSwipe 
 
   if (!isFront) {
     return (
-      <div className="absolute inset-0 w-full h-[540px] rounded-3xl bg-[#FFF9F6] border-2 border-[#1C1C1E] shadow-coy overflow-hidden select-none pointer-events-none scale-[0.94] translate-y-3 opacity-90 transition-all duration-300">
+      <motion.div
+        initial={{ scale: 0.94, y: 12, opacity: 0.85 }}
+        animate={{ scale: 0.94, y: 12, opacity: 0.85 }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
+        className="absolute inset-0 w-full h-[540px] rounded-3xl bg-[#FFF9F6] border-2 border-[#1C1C1E] shadow-coy overflow-hidden select-none pointer-events-none"
+      >
         <div className="relative w-full h-full flex flex-col pointer-events-none">
           <div className="relative h-[65%] w-full overflow-hidden bg-gray-100">
             <img
@@ -62,21 +81,21 @@ export const SwipeCard: React.FC<SwipeCardProps> = ({ profile, isFront, onSwipe 
             </p>
           </div>
         </div>
-      </div>
+      </motion.div>
     );
   }
 
   return (
     <motion.div
       style={{ x: showDetails ? 0 : x, rotate: showDetails ? 0 : rotate }}
-      drag={showDetails ? false : "x"}
+      drag={showDetails || isDismissing ? false : "x"}
       dragConstraints={{ left: 0, right: 0 }}
       dragElastic={0.9}
       onDragEnd={handleDragEnd}
-      className="absolute inset-0 w-full h-[540px] rounded-3xl bg-white border-2 border-[#1C1C1E] shadow-coy-lg overflow-hidden cursor-grab active:cursor-grabbing select-none z-10 flex flex-col"
-      initial={{ scale: 0.95, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      exit={{ opacity: 0, scale: 0.85, transition: { duration: 0.2 } }}
+      className="absolute inset-0 w-full h-[540px] rounded-3xl bg-white border-2 border-[#1C1C1E] shadow-coy-lg overflow-hidden cursor-grab active:cursor-grabbing select-none z-10 flex flex-col will-change-transform"
+      initial={{ scale: 0.94, y: 12, opacity: 0.85 }}
+      animate={{ scale: 1, y: 0, opacity: 1 }}
+      transition={{ duration: 0.25, ease: 'easeOut' }}
     >
       <div className="relative w-full h-full flex flex-col">
         {/* Swipe Feedback Badges */}

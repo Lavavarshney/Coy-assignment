@@ -156,23 +156,23 @@ export default function App() {
               <>
                 {/* Card Stack Container */}
                 <div className="relative w-full h-[540px] max-w-sm mx-auto mt-1">
-                  <AnimatePresence>
-                    {feed.length > 1 && (
-                      <SwipeCard
-                        key={feed[1].id}
-                        profile={feed[1]}
-                        isFront={false}
-                        onSwipe={() => {}}
-                      />
-                    )}
+                  {feed.length > 1 && (
+                    <SwipeCard
+                      key={feed[1].id}
+                      profile={feed[1]}
+                      isFront={false}
+                      onSwipe={() => {}}
+                    />
+                  )}
 
+                  {feed.length > 0 && (
                     <SwipeCard
                       key={feed[0].id}
                       profile={feed[0]}
                       isFront={true}
                       onSwipe={handleSwipe}
                     />
-                  </AnimatePresence>
+                  )}
                 </div>
 
                 {/* Bottom Desktop/Tap Action Buttons: Hidden on mobile (drag gestures only), visible on desktop md+ */}
