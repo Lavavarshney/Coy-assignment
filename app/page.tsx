@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
-import { Heart, X, RotateCcw, Flame } from 'lucide-react';
+import { Heart, X, RotateCcw, Flame, ShieldCheck } from 'lucide-react';
 import { Profile, Match } from '@/types';
 import { SwipeCard } from '@/components/SwipeCard';
 import { MatchModal } from '@/components/MatchModal';
@@ -10,6 +10,7 @@ import { MatchesView } from '@/components/MatchesView';
 import { EmptyFeed } from '@/components/EmptyFeed';
 import { HomePlaceholder } from '@/components/HomePlaceholder';
 import { TabBar } from '@/components/TabBar';
+import { GhostShieldModal } from '@/components/GhostShieldModal';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<'home' | 'discover' | 'matches'>('discover');
@@ -18,6 +19,7 @@ export default function App() {
   const [loading, setLoading] = useState<boolean>(true);
   const [newMatchProfile, setNewMatchProfile] = useState<Profile | null>(null);
   const [isSwiping, setIsSwiping] = useState<boolean>(false);
+  const [showGhostShield, setShowGhostShield] = useState<boolean>(false);
 
   // Initial data fetch
   const fetchData = async () => {
@@ -116,6 +118,16 @@ export default function App() {
             </div>
           )}
 
+          {/* Ghost Shield Privacy Button */}
+          <button
+            onClick={() => setShowGhostShield(true)}
+            title="Ghost Shield / Silent Block Settings"
+            className="p-1.5 rounded-xl border border-purple-200 bg-purple-50 text-purple-700 hover:bg-purple-100 transition-colors flex items-center gap-1 text-xs font-bold"
+          >
+            <ShieldCheck className="w-4 h-4 text-purple-600" />
+            <span className="hidden sm:inline">Shield</span>
+          </button>
+
           <button
             onClick={handleReset}
             title="Reset demo data"
@@ -211,6 +223,13 @@ export default function App() {
           setNewMatchProfile(null);
           setActiveTab('matches');
         }}
+      />
+
+      {/* Ghost Shield & Privacy Modal */}
+      <GhostShieldModal
+        isOpen={showGhostShield}
+        onClose={() => setShowGhostShield(false)}
+        onBlockSuccess={fetchData}
       />
 
       {/* Bottom Navigation */}
