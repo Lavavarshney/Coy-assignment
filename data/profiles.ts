@@ -1,11 +1,12 @@
 import { Profile } from '../types';
 
+// Curated high-resolution portrait URLs of 21-22 year old Indian college students / young men
 export const INITIAL_PROFILES: Profile[] = [
   {
     id: "p1",
     name: "Aarav Sharma",
-    age: 22,
-    photo: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=800&q=80",
+    age: 21,
+    photo: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=800&q=80",
     bio: "Architecture major sketching old Delhi coffee spots. Ask me about my 35mm film camera and matcha recipes!",
     location: "IIT Delhi",
     majorOrWork: "Architecture '25",
@@ -28,7 +29,7 @@ export const INITIAL_PROFILES: Profile[] = [
   {
     id: "p3",
     name: "Kabir Mehta",
-    age: 23,
+    age: 21,
     photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=80",
     bio: "Product designer and amateur mixologist. If you appreciate good typography and fresh sourdough, let's talk.",
     location: "NID Ahmedabad",
@@ -40,7 +41,7 @@ export const INITIAL_PROFILES: Profile[] = [
   {
     id: "p4",
     name: "Arjun Nambiar",
-    age: 24,
+    age: 22,
     photo: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=800&q=80",
     bio: "Finance analyst who lives for weekend treks in the Western Ghats. Can brew the best authentic South Indian filter coffee.",
     location: "Bangalore",
@@ -52,7 +53,7 @@ export const INITIAL_PROFILES: Profile[] = [
   {
     id: "p5",
     name: "Dev Singhania",
-    age: 23,
+    age: 21,
     photo: "https://images.unsplash.com/photo-1480429370139-e0132c086e2a?auto=format&fit=crop&w=800&q=80",
     bio: "Mechanical engineer building autonomous drones. Formula 1 fanatic — Ferrari heartbreaks only.",
     location: "IIT Bombay",
@@ -65,7 +66,7 @@ export const INITIAL_PROFILES: Profile[] = [
     id: "p6",
     name: "Karan Johar",
     age: 22,
-    photo: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=800&q=80",
+    photo: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=800&q=80",
     bio: "Not the director! CS student working on AI agents, hiking, and open mic standup comedy.",
     location: "IIIT Hyderabad",
     majorOrWork: "Computer Science '24",
@@ -76,7 +77,7 @@ export const INITIAL_PROFILES: Profile[] = [
   {
     id: "p7",
     name: "Zayd Merchant",
-    age: 23,
+    age: 21,
     photo: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80",
     bio: "Culinary explorer and pastry enthusiast. I express love by baking fresh cinnamon rolls on Sundays.",
     location: "Mumbai",
@@ -88,7 +89,7 @@ export const INITIAL_PROFILES: Profile[] = [
   {
     id: "p8",
     name: "Nikhil Rastogi",
-    age: 24,
+    age: 22,
     photo: "https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?auto=format&fit=crop&w=800&q=80",
     bio: "Product Manager navigating startup chaos. Let's debate iOS vs Android or go for a morning 10k run.",
     location: "Gurgaon",
@@ -100,7 +101,7 @@ export const INITIAL_PROFILES: Profile[] = [
   {
     id: "p9",
     name: "Aadit Bansal",
-    age: 22,
+    age: 21,
     photo: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=800&q=80",
     bio: "Economics grad student. Will challenge you to Catan or chess and probably lose gracefully.",
     location: "Delhi School of Economics",
@@ -112,7 +113,7 @@ export const INITIAL_PROFILES: Profile[] = [
   {
     id: "p10",
     name: "Samir Kulkarni",
-    age: 23,
+    age: 22,
     photo: "https://images.unsplash.com/photo-1519052537078-e6302a4968d4?auto=format&fit=crop&w=800&q=80",
     bio: "Hardware hacker and 3D printing nerd. Always trying to automate things that take 2 seconds manually.",
     location: "COEP Pune",
@@ -124,7 +125,7 @@ export const INITIAL_PROFILES: Profile[] = [
   {
     id: "p11",
     name: "Vikram Malhotra",
-    age: 25,
+    age: 22,
     photo: "https://images.unsplash.com/photo-1463453091185-61582044d556?auto=format&fit=crop&w=800&q=80",
     bio: "Lawyer in training. Pro-Oxford comma. When not reading contracts, I am playing acoustic guitar.",
     location: "NLSIU Bangalore",
@@ -136,7 +137,7 @@ export const INITIAL_PROFILES: Profile[] = [
   {
     id: "p12",
     name: "Yashvardhan Rao",
-    age: 23,
+    age: 21,
     photo: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=800&q=80",
     bio: "Commercial pilot trainee. Can give you cool aerial weather trivia. Huge fan of bouldering and rock.",
     location: "IGRUA",
@@ -148,7 +149,7 @@ export const INITIAL_PROFILES: Profile[] = [
   {
     id: "p13",
     name: "Pranav Joshi",
-    age: 24,
+    age: 22,
     photo: "https://images.unsplash.com/photo-1496345875659-11f7dd282d1d?auto=format&fit=crop&w=800&q=80",
     bio: "Data scientist working on climate models. Half-marathons, specialty aeropress coffee, and late night drives.",
     location: "Hyderabad",
@@ -160,7 +161,7 @@ export const INITIAL_PROFILES: Profile[] = [
   {
     id: "p14",
     name: "Madhav Menon",
-    age: 22,
+    age: 21,
     photo: "https://images.unsplash.com/photo-1513956589380-bad6acb9b9d4?auto=format&fit=crop&w=800&q=80",
     bio: "Drummer in a college rock band. Will trade witty banter for authentic street food recommendations.",
     location: "NIT Trichy",
@@ -172,7 +173,7 @@ export const INITIAL_PROFILES: Profile[] = [
   {
     id: "p15",
     name: "Armaan Gill",
-    age: 23,
+    age: 22,
     photo: "https://images.unsplash.com/photo-1528892952291-009c663ce843?auto=format&fit=crop&w=800&q=80",
     bio: "Culinary nomad & street photographer. Believe the world is best experienced one meal at a time.",
     location: "Chandigarh",
@@ -184,8 +185,8 @@ export const INITIAL_PROFILES: Profile[] = [
   {
     id: "p16",
     name: "Farhan Ali",
-    age: 23,
-    photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=80",
+    age: 21,
+    photo: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=800&q=80",
     bio: "Theatre actor and slam poet. Enthusiastic about live performances and late-night chai debates.",
     location: "Jamia Millia Islamia, Delhi",
     majorOrWork: "Mass Communication",
@@ -196,7 +197,7 @@ export const INITIAL_PROFILES: Profile[] = [
   {
     id: "p17",
     name: "Tushar Agrawal",
-    age: 24,
+    age: 22,
     photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80",
     bio: "Cybersecurity analyst by day, escape room enthusiast by night. Can you crack the cipher?",
     location: "Pune",
@@ -209,7 +210,7 @@ export const INITIAL_PROFILES: Profile[] = [
     id: "p18",
     name: "Reyansh Gupta",
     age: 21,
-    photo: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=800&q=80",
+    photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=80",
     bio: "Illustrator and comic book collector. If you want someone to explore graphic novels with, say hi.",
     location: "Srishti Institute Bangalore",
     majorOrWork: "Visual Arts",
@@ -220,7 +221,7 @@ export const INITIAL_PROFILES: Profile[] = [
   {
     id: "p19",
     name: "Dhruv Kapoor",
-    age: 23,
+    age: 22,
     photo: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=800&q=80",
     bio: "Biotech researcher working on microbial genetics. Passionate about plant-based cooking and tennis.",
     location: "IISc Bangalore",
@@ -232,7 +233,7 @@ export const INITIAL_PROFILES: Profile[] = [
   {
     id: "p20",
     name: "Ishaan Sen",
-    age: 22,
+    age: 21,
     photo: "https://images.unsplash.com/photo-1480429370139-e0132c086e2a?auto=format&fit=crop&w=800&q=80",
     bio: "Guitarist and sound engineer. Looking for someone who doesn't mind listening to my rough music mixes.",
     location: "KM Music Conservatory, Chennai",
@@ -244,8 +245,8 @@ export const INITIAL_PROFILES: Profile[] = [
   {
     id: "p21",
     name: "Aditya Nair",
-    age: 24,
-    photo: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=800&q=80",
+    age: 22,
+    photo: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=800&q=80",
     bio: "Civil engineer designing smart cities. Weekends are reserved for badminton and experimenting with pasta sauces.",
     location: "IIT Roorkee",
     majorOrWork: "Civil Engineering",
@@ -256,7 +257,7 @@ export const INITIAL_PROFILES: Profile[] = [
   {
     id: "p22",
     name: "Siddharth Roy",
-    age: 23,
+    age: 21,
     photo: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80",
     bio: "Fintech developer and bookworm. Let's talk about behavioral economics over hot hot chocolate.",
     location: "Kolkata",
@@ -292,7 +293,7 @@ export const INITIAL_PROFILES: Profile[] = [
   {
     id: "p25",
     name: "Kunal Bajaj",
-    age: 24,
+    age: 22,
     photo: "https://images.unsplash.com/photo-1519052537078-e6302a4968d4?auto=format&fit=crop&w=800&q=80",
     bio: "Growth marketer by day, board game strategist by night. Let's play Settlers of Catan or Ticket to Ride.",
     location: "Gurgaon",
@@ -304,7 +305,7 @@ export const INITIAL_PROFILES: Profile[] = [
   {
     id: "p26",
     name: "Varun Chopra",
-    age: 22,
+    age: 21,
     photo: "https://images.unsplash.com/photo-1463453091185-61582044d556?auto=format&fit=crop&w=800&q=80",
     bio: "AI researcher focusing on computer vision. In my free time, I love trying new street food and bouldering.",
     location: "IIIT Bangalore",
@@ -316,7 +317,7 @@ export const INITIAL_PROFILES: Profile[] = [
   {
     id: "p27",
     name: "Raghav Goel",
-    age: 23,
+    age: 22,
     photo: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=800&q=80",
     bio: "Product strategist and vinyl enthusiast. Passionate about indie films and architectural photography.",
     location: "Delhi",
@@ -340,7 +341,7 @@ export const INITIAL_PROFILES: Profile[] = [
   {
     id: "p29",
     name: "Vivaan Singhal",
-    age: 23,
+    age: 22,
     photo: "https://images.unsplash.com/photo-1513956589380-bad6acb9b9d4?auto=format&fit=crop&w=800&q=80",
     bio: "Literature major writing a fantasy novel. Always down for late-night hot cocoa and debating plot twists.",
     location: "Ashoka University",
@@ -352,7 +353,7 @@ export const INITIAL_PROFILES: Profile[] = [
   {
     id: "p30",
     name: "Tanmay Deshmukh",
-    age: 24,
+    age: 21,
     photo: "https://images.unsplash.com/photo-1528892952291-009c663ce843?auto=format&fit=crop&w=800&q=80",
     bio: "Aerospace engineer calculating orbital trajectories. Looking for someone to stargaze with.",
     location: "IIT Kanpur",
@@ -365,7 +366,7 @@ export const INITIAL_PROFILES: Profile[] = [
     id: "p31",
     name: "Aman Sehgal",
     age: 22,
-    photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80",
+    photo: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=800&q=80",
     bio: "Psychology researcher curious about how habits form. Let's psychoanalyze your favorite movies.",
     location: "TISS Mumbai",
     majorOrWork: "Psychology",
@@ -376,8 +377,8 @@ export const INITIAL_PROFILES: Profile[] = [
   {
     id: "p32",
     name: "Sahil Bakshi",
-    age: 23,
-    photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=80",
+    age: 22,
+    photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80",
     bio: "Graphic novelist and animator. Enjoys cozy ramen shops and sketchbook sessions in parks.",
     location: "Ahmedabad",
     majorOrWork: "Animation",

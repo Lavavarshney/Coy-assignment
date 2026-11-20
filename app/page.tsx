@@ -12,6 +12,9 @@ import { HomePlaceholder } from '@/components/HomePlaceholder';
 import { TabBar } from '@/components/TabBar';
 import { GhostShieldModal } from '@/components/GhostShieldModal';
 
+const LOCAL_STORAGE_SWIPES_KEY = 'coy_swiped_ids_v1';
+const LOCAL_STORAGE_MATCHES_KEY = 'coy_local_matches_v1';
+
 export default function App() {
   const [activeTab, setActiveTab] = useState<'home' | 'discover' | 'matches'>('discover');
   const [feed, setFeed] = useState<Profile[]>([]);
@@ -21,7 +24,7 @@ export default function App() {
   const [isSwiping, setIsSwiping] = useState<boolean>(false);
   const [showGhostShield, setShowGhostShield] = useState<boolean>(false);
 
-  // Initial data fetch
+  // Initial data fetch + Client-side reload persistence reconciliation
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -33,12 +36,32 @@ export default function App() {
       const feedData = await feedRes.json();
       const matchesData = await matchesRes.json();
 
-      if (feedData.success) {
-        setFeed(feedData.profiles || []);
+      let clientSwipedIds: string[] = [];
+      let clientLocalMatches: Match[] = [];
+
+      if (typeof window !== 'undefined') {
+        try {
+          clientSwipedIds = JSON.parse(localStorage.getItem(LOCAL_STORAGE_SWIPES_KEY) || '[]');
+          clientLocalMatches = JSON.parse(localStorage.getItem(LOCAL_STORAGE_MATCHES_KEY) || '[]');
+        } catch (e) {
+          console.warn('Could not read from localStorage', e);
+        }
       }
-      if (matchesData.success) {
-        setMatches(matchesData.matches || []);
+
+      const swipedSet = new Set(clientSwipedIds);
+
+      if (feedData.success && feedData.profiles) {
+        // Filter out any profiles swiped in this client session
+        const filteredFeed = feedData.profiles.filter((p: Profile) => !swipedSet.has(p.id));
+        setFeed(filteredFeed);
       }
+
+      // Merge server matches with local client matches
+      const combinedMatchesMap = new Map<string, Match>();
+      (matchesData.matches || []).forEach((m: Match) => combinedMatchesMap.set(m.profile.id, m));
+      clientLocalMatches.forEach((m: Match) => combinedMatchesMap.set(m.profile.id, m));
+
+      setMatches(Array.from(combinedMatchesMap.values()));
     } catch (err) {
       console.error('Failed to load Coy data', err);
     } finally {
@@ -59,7 +82,21 @@ export default function App() {
     const remaining = feed.slice(1);
     setFeed(remaining);
 
+    // 1. Immediately persist swipe to localStorage so page refresh NEVER resets the card
+    if (typeof window !== 'undefined') {
+      try {
+        const existing: string[] = JSON.parse(localStorage.getItem(LOCAL_STORAGE_SWIPES_KEY) || '[]');
+        if (!existing.includes(swipedProfile.id)) {
+          existing.push(swipedProfile.id);
+          localStorage.setItem(LOCAL_STORAGE_SWIPES_KEY, JSON.stringify(existing));
+        }
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+
     try {
+      // 2. Synchronize with backend API
       const res = await fetch('/api/swipe', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -69,12 +106,24 @@ export default function App() {
       const data = await res.json();
 
       if (data.success && data.isMatch) {
-        setNewMatchProfile(data.profile || swipedProfile);
-        const matchesRes = await fetch('/api/matches');
-        const matchesData = await matchesRes.json();
-        if (matchesData.success) {
-          setMatches(matchesData.matches || []);
-        }
+        const matched = data.profile || swipedProfile;
+        setNewMatchProfile(matched);
+
+        const newMatchObj: Match = {
+          id: `match_${Date.now()}_${matched.id}`,
+          profile: matched,
+          matchedAt: new Date().toISOString()
+        };
+
+        setMatches(prev => {
+          const nextMatches = [newMatchObj, ...prev.filter(m => m.profile.id !== matched.id)];
+          if (typeof window !== 'undefined') {
+            try {
+              localStorage.setItem(LOCAL_STORAGE_MATCHES_KEY, JSON.stringify(nextMatches));
+            } catch (e) {}
+          }
+          return nextMatches;
+        });
       }
     } catch (err) {
       console.error('Error recording swipe:', err);
@@ -89,6 +138,10 @@ export default function App() {
   const handleReset = async () => {
     try {
       setLoading(true);
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem(LOCAL_STORAGE_SWIPES_KEY);
+        localStorage.removeItem(LOCAL_STORAGE_MATCHES_KEY);
+      }
       await fetch('/api/matches', { method: 'POST' });
       await fetchData();
     } catch (err) {
@@ -186,9 +239,8 @@ export default function App() {
                   )}
                 </div>
 
-                {/* Bottom Desktop/Tap Action Buttons: Hidden on mobile (drag gestures only), visible on desktop md+ */}
+                {/* Bottom Desktop Action Buttons */}
                 <div className="hidden md:flex justify-center items-center gap-6 mt-3">
-                  {/* Pass Button */}
                   <button
                     onClick={() => handleSwipe('pass')}
                     disabled={isSwiping}
@@ -198,7 +250,6 @@ export default function App() {
                     <X className="w-7 h-7 stroke-[2.7] group-hover:scale-110 transition-transform" />
                   </button>
 
-                  {/* Like Button */}
                   <button
                     onClick={() => handleSwipe('like')}
                     disabled={isSwiping}
