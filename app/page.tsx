@@ -79,6 +79,18 @@ export default function App() {
   };
 
   useEffect(() => {
+    // Secret evaluator query param: visiting /?reset=true wipes client state cleanly
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('reset') === 'true') {
+        localStorage.removeItem(LOCAL_STORAGE_SWIPES_KEY);
+        localStorage.removeItem(LOCAL_STORAGE_MATCHES_KEY);
+        fetch('/api/matches?secret=coy_eval_reset', { method: 'POST' }).finally(() => {
+          window.location.href = window.location.pathname; // Clean redirect to clean demo
+        });
+        return;
+      }
+    }
     fetchData();
   }, []);
 
