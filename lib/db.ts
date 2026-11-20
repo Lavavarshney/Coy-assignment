@@ -3,42 +3,68 @@ import path from 'path';
 import { DbSchema, Match, Profile } from '../types';
 import { INITIAL_PROFILES } from '../data/profiles';
 
-const DB_FILE = path.join(process.cwd(), 'data', 'db.json');
+// On serverless environments (like Vercel / Netlify / Render), the local repo filesystem is strictly READ-ONLY.
+// Writing to process.cwd()/data/db.json crashes with EROFS (Error: read-only file system) -> Status 500!
+// /tmp is the standard writable scratch storage for serverless functions.
+const isServerless = process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME || process.env.NODE_ENV === 'production';
+const DB_FILE = isServerless
+  ? path.join('/tmp', 'coy_db.json')
+  : path.join(process.cwd(), 'data', 'db.json');
+
+// In-memory fallback in case of any filesystem write restrictions in container environments
+let memoryDb: DbSchema | null = null;
 
 export function ensureDbFile(): DbSchema {
-  if (!fs.existsSync(DB_FILE)) {
-    const initialData: DbSchema = {
-      profiles: INITIAL_PROFILES,
-      swipes: {},
-      matches: [],
-      blockedUserIds: ['p32'], // Example: p32 (Tushar) is silently blocked
-      history: []
-    };
-    fs.mkdirSync(path.dirname(DB_FILE), { recursive: true });
-    fs.writeFileSync(DB_FILE, JSON.stringify(initialData, null, 2), 'utf8');
-    return initialData;
+  if (memoryDb) {
+    return memoryDb;
   }
 
   try {
-    const raw = fs.readFileSync(DB_FILE, 'utf8');
-    const parsed = JSON.parse(raw);
-    if (!parsed.blockedUserIds) parsed.blockedUserIds = ['p32'];
-    return parsed;
+    if (fs.existsSync(DB_FILE)) {
+      const raw = fs.readFileSync(DB_FILE, 'utf8');
+      const parsed = JSON.parse(raw);
+      if (!parsed.blockedUserIds) parsed.blockedUserIds = ['p32'];
+      memoryDb = parsed;
+      return parsed;
+    }
   } catch (err) {
-    const initialData: DbSchema = {
-      profiles: INITIAL_PROFILES,
-      swipes: {},
-      matches: [],
-      blockedUserIds: ['p32'],
-      history: []
-    };
-    fs.writeFileSync(DB_FILE, JSON.stringify(initialData, null, 2), 'utf8');
-    return initialData;
+    console.warn('Unable to read from filesystem storage, falling back to memory state:', err);
   }
+
+  const initialData: DbSchema = {
+    profiles: INITIAL_PROFILES,
+    swipes: {},
+    matches: [],
+    blockedUserIds: ['p32'],
+    history: []
+  };
+
+  try {
+    const dir = path.dirname(DB_FILE);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    fs.writeFileSync(DB_FILE, JSON.stringify(initialData, null, 2), 'utf8');
+  } catch (err) {
+    console.warn('Filesystem write not permitted, using in-memory state:', err);
+  }
+
+  memoryDb = initialData;
+  return initialData;
 }
 
 export function saveDb(data: DbSchema): void {
-  fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), 'utf8');
+  memoryDb = data;
+  try {
+    const dir = path.dirname(DB_FILE);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), 'utf8');
+  } catch (err) {
+    // Fail gracefully to in-memory state without throwing 500
+    console.warn('Could not persist to disk, maintained in memory:', err);
+  }
 }
 
 /**
@@ -65,15 +91,12 @@ export function silentlyBlockUser(profileId: string): void {
   if (!db.blockedUserIds.includes(profileId)) {
     db.blockedUserIds.push(profileId);
   }
-  // Automatically remove any existing mutual match silently
   db.matches = db.matches.filter(m => m.profile.id !== profileId);
   saveDb(db);
 }
 
 /**
  * Records a swipe with mutual match calculation & Ghost Shield protection.
- * Even if a blocked user liked the current user, or if someone likes a blocked user,
- * NO match is ever created and NO error is leaked.
  */
 export function recordSwipe(profileId: string, action: 'like' | 'pass'): { isMatch: boolean; profile?: Profile } {
   const db = ensureDbFile();
@@ -102,7 +125,6 @@ export function recordSwipe(profileId: string, action: 'like' | 'pass'): { isMat
   }
 
   saveDb(db);
-  // Returns identical neutral JSON structure: no leakage of blocked status!
   return { isMatch, profile };
 }
 
