@@ -1,8 +1,8 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { motion, useMotionValue, useTransform } from 'framer-motion';
-import { MapPin, Heart, X, Sparkles } from 'lucide-react';
+import { MapPin, Heart, X, Sparkles, Music, Info, GraduationCap, ChevronDown } from 'lucide-react';
 import { Profile } from '../types';
 
 interface SwipeCardProps {
@@ -12,6 +12,9 @@ interface SwipeCardProps {
 }
 
 export const SwipeCard: React.FC<SwipeCardProps> = ({ profile, isFront, onSwipe }) => {
+  const [photoIndex, setPhotoIndex] = useState(0);
+  const [showDetails, setShowDetails] = useState(false);
+
   const x = useMotionValue(0);
   const rotate = useTransform(x, [-200, 200], [-18, 18]);
 
@@ -20,7 +23,8 @@ export const SwipeCard: React.FC<SwipeCardProps> = ({ profile, isFront, onSwipe 
   const nopeOpacity = useTransform(x, [-90, -20], [1, 0]);
 
   const handleDragEnd = (_: any, info: any) => {
-    const threshold = 100;
+    if (showDetails) return; // Prevent swipe while reading details
+    const threshold = 90;
     if (info.offset.x > threshold) {
       onSwipe('like');
     } else if (info.offset.x < -threshold) {
@@ -28,30 +32,42 @@ export const SwipeCard: React.FC<SwipeCardProps> = ({ profile, isFront, onSwipe 
     }
   };
 
+  const nextPhoto = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (photoIndex < (profile.photos?.length || 1) - 1) {
+      setPhotoIndex(photoIndex + 1);
+    }
+  };
+
+  const prevPhoto = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (photoIndex > 0) {
+      setPhotoIndex(photoIndex - 1);
+    }
+  };
+
+  const currentPhoto = profile.photos && profile.photos.length > 0 ? profile.photos[photoIndex] : '';
+
   if (!isFront) {
     return (
-      <div 
-        className="absolute inset-0 w-full h-[520px] rounded-3xl bg-[#FFF9F6] border-2 border-[#1C1C1E] shadow-coy overflow-hidden select-none pointer-events-none scale-[0.94] translate-y-3 opacity-90 transition-all duration-300"
-      >
+      <div className="absolute inset-0 w-full h-[540px] rounded-3xl bg-[#FFF9F6] border-2 border-[#1C1C1E] shadow-coy overflow-hidden select-none pointer-events-none scale-[0.94] translate-y-3 opacity-90 transition-all duration-300">
         <div className="relative w-full h-full flex flex-col">
-          <div className="relative h-[68%] w-full overflow-hidden bg-gray-100">
+          <div className="relative h-[65%] w-full overflow-hidden bg-gray-100">
             <img
-              src={profile.photo}
+              src={profile.photos?.[0]}
               alt={profile.name}
               className="w-full h-full object-cover pointer-events-none"
             />
           </div>
           <div className="p-4 bg-white flex-1 flex flex-col justify-between">
-            <div>
-              <div className="flex items-baseline gap-2">
-                <h3 className="text-xl font-bold text-[#1C1C1E]">{profile.name}</h3>
-                <span className="text-lg font-semibold text-gray-500">{profile.age}</span>
-              </div>
-              <p className="text-xs text-gray-500 flex items-center gap-1 mt-0.5">
-                <MapPin className="w-3.5 h-3.5 text-coy-pink" />
-                {profile.location}
-              </p>
+            <div className="flex items-baseline gap-2">
+              <h3 className="text-xl font-bold text-[#1C1C1E]">{profile.name}</h3>
+              <span className="text-lg font-semibold text-gray-500">{profile.age}</span>
             </div>
+            <p className="text-xs text-gray-500 flex items-center gap-1">
+              <MapPin className="w-3.5 h-3.5 text-coy-pink" />
+              {profile.location}
+            </p>
           </div>
         </div>
       </div>
@@ -60,18 +76,18 @@ export const SwipeCard: React.FC<SwipeCardProps> = ({ profile, isFront, onSwipe 
 
   return (
     <motion.div
-      style={{ x, rotate }}
-      drag="x"
+      style={{ x: showDetails ? 0 : x, rotate: showDetails ? 0 : rotate }}
+      drag={showDetails ? false : "x"}
       dragConstraints={{ left: 0, right: 0 }}
       dragElastic={0.7}
       onDragEnd={handleDragEnd}
-      whileTap={{ cursor: 'grabbing' }}
-      className="absolute inset-0 w-full h-[520px] rounded-3xl bg-white border-2 border-[#1C1C1E] shadow-coy-lg overflow-hidden cursor-grab active:cursor-grabbing select-none touch-none z-10"
+      whileTap={{ cursor: showDetails ? 'default' : 'grabbing' }}
+      className="absolute inset-0 w-full h-[540px] rounded-3xl bg-white border-2 border-[#1C1C1E] shadow-coy-lg overflow-hidden cursor-grab active:cursor-grabbing select-none touch-none z-10 flex flex-col"
       initial={{ scale: 0.95, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
     >
-      <div className="relative w-full h-full flex flex-col">
+      <div className="relative w-full h-full flex flex-col overflow-y-auto">
         {/* Swipe Feedback Badges */}
         <motion.div
           style={{ opacity: likeOpacity }}
@@ -89,35 +105,112 @@ export const SwipeCard: React.FC<SwipeCardProps> = ({ profile, isFront, onSwipe 
           <span className="text-2xl font-black text-[#EF4444] tracking-wider uppercase">PASS</span>
         </motion.div>
 
-        {/* Profile Image with subtle overlay */}
-        <div className="relative h-[65%] w-full overflow-hidden bg-gray-100">
+        {/* Profile Image with Instagram Story Tap Zones */}
+        <div className="relative h-[65%] w-full min-h-[350px] shrink-0 overflow-hidden bg-gray-100">
           <img
-            src={profile.photo}
+            src={currentPhoto}
             alt={profile.name}
-            className="w-full h-full object-cover pointer-events-none"
-            loading="eager"
+            className="w-full h-full object-cover pointer-events-none transition-all duration-300"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
-          
-          {/* Quick info overlaid on bottom of picture */}
-          <div className="absolute bottom-3 left-4 right-4 text-white">
-            <div className="flex items-baseline gap-2">
-              <h2 className="text-2xl font-black drop-shadow-md">{profile.name}</h2>
-              <span className="text-xl font-bold opacity-90">{profile.age}</span>
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
+
+          {/* Story Bar Segments */}
+          {profile.photos && profile.photos.length > 1 && (
+            <div className="absolute top-3 inset-x-3 z-20 flex gap-1.5 pointer-events-none">
+              {profile.photos.map((_, idx) => (
+                <div
+                  key={idx}
+                  className={`h-1 flex-1 rounded-full transition-all duration-300 ${
+                    idx === photoIndex ? 'bg-white' : 'bg-white/40'
+                  }`}
+                />
+              ))}
             </div>
-            <p className="text-xs font-medium text-gray-200 flex items-center gap-1 mt-0.5">
-              <MapPin className="w-3.5 h-3.5 text-coy-pink" />
-              {profile.location}
-            </p>
+          )}
+
+          {/* Left / Right Tap zones for photo navigation */}
+          {profile.photos && profile.photos.length > 1 && (
+            <>
+              <button
+                onClick={prevPhoto}
+                className="absolute inset-y-0 left-0 w-1/3 z-20 opacity-0 cursor-pointer"
+                aria-label="Previous photo"
+              />
+              <button
+                onClick={nextPhoto}
+                className="absolute inset-y-0 right-0 w-1/3 z-20 opacity-0 cursor-pointer"
+                aria-label="Next photo"
+              />
+            </>
+          )}
+
+          {/* Main Card Info Overlay */}
+          <div className="absolute bottom-3 left-4 right-4 z-20 text-white flex items-end justify-between">
+            <div>
+              <div className="flex items-baseline gap-2">
+                <h2 className="text-2xl font-black drop-shadow-md">{profile.name}</h2>
+                <span className="text-xl font-bold opacity-90">{profile.age}</span>
+              </div>
+              <p className="text-xs font-semibold text-gray-200 flex items-center gap-1 mt-0.5">
+                <MapPin className="w-3.5 h-3.5 text-coy-pink" />
+                {profile.location}
+              </p>
+              {profile.majorOrWork && (
+                <p className="text-[11px] font-medium text-gray-300 flex items-center gap-1 mt-0.5">
+                  <GraduationCap className="w-3.5 h-3.5 text-yellow-300" />
+                  {profile.majorOrWork}
+                </p>
+              )}
+            </div>
+
+            {/* Expand / Details Toggle Button */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowDetails(!showDetails);
+              }}
+              className="p-2 rounded-full bg-white/20 backdrop-blur-md border border-white/40 text-white hover:bg-white/30 transition-all cursor-pointer"
+              title="View full profile"
+            >
+              {showDetails ? <ChevronDown className="w-4 h-4" /> : <Info className="w-4 h-4" />}
+            </button>
           </div>
         </div>
 
-        {/* Bio & Interests */}
+        {/* Bio & Extended Details Sheet */}
         <div className="p-4 bg-white flex-1 flex flex-col justify-between">
-          <p className="text-xs text-gray-700 leading-relaxed font-medium line-clamp-3">
+          <p className="text-xs text-gray-700 leading-relaxed font-medium">
             {profile.bio}
           </p>
 
+          {/* Spotify Anthem if present */}
+          {profile.spotifyAnthem && (
+            <div className="my-2 p-2.5 rounded-xl bg-[#1DB954]/10 border border-[#1DB954]/30 flex items-center gap-2.5">
+              <div className="w-7 h-7 rounded-full bg-[#1DB954] flex items-center justify-center shrink-0">
+                <Music className="w-3.5 h-3.5 text-white" />
+              </div>
+              <div className="truncate">
+                <p className="text-[10px] uppercase font-bold text-[#1DB954] tracking-wider">Anthem</p>
+                <p className="text-xs font-bold text-gray-900 truncate">
+                  {profile.spotifyAnthem.song} <span className="font-normal text-gray-500">· {profile.spotifyAnthem.artist}</span>
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Prompts Q&A when expanded */}
+          {showDetails && profile.prompts && profile.prompts.length > 0 && (
+            <div className="space-y-2 my-2">
+              {profile.prompts.map((p, i) => (
+                <div key={i} className="p-3 bg-[#FAF8F5] rounded-xl border border-gray-200">
+                  <p className="text-[10px] font-bold uppercase text-gray-400">{p.question}</p>
+                  <p className="text-xs font-semibold text-gray-800 mt-0.5">{p.answer}</p>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Interests Tags */}
           <div className="flex flex-wrap gap-1.5 mt-2">
             {profile.interests.map((interest) => (
               <span

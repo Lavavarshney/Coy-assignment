@@ -93,7 +93,7 @@ export const MatchModal: React.FC<MatchModalProps> = ({
             {/* Matched Profile Circle */}
             <div className="relative -ml-4 w-24 h-24 rounded-full border-3 border-[#1C1C1E] overflow-hidden shadow-coy z-20">
               <img
-                src={matchedProfile.photo}
+                src={matchedProfile.photos?.[0]}
                 alt={matchedProfile.name}
                 className="w-full h-full object-cover"
               />
