@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { DbSchema, Match, Profile, MatchMessage } from '../types';
+import { DbSchema, Match, Profile } from '../types';
 import { INITIAL_PROFILES } from '../data/profiles';
 
 const DB_FILE = path.join(process.cwd(), 'data', 'db.json');
@@ -96,15 +96,7 @@ export function recordSwipe(profileId: string, action: 'like' | 'pass'): { isMat
       db.matches.push({
         id: `match_${Date.now()}_${profileId}`,
         profile: profile,
-        matchedAt: new Date().toISOString(),
-        messages: [
-          {
-            id: `msg_init_${Date.now()}`,
-            sender: 'match',
-            text: `Hey! So glad we matched on Coy! 😊`,
-            timestamp: new Date().toISOString()
-          }
-        ]
+        matchedAt: new Date().toISOString()
       });
     }
   }

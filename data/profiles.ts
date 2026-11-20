@@ -3,21 +3,13 @@ import { Profile } from '../types';
 export const INITIAL_PROFILES: Profile[] = [
   {
     id: "p1",
-    name: "Aanya Sharma",
-    age: 21,
-    photos: [
-      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80"
-    ],
-    bio: "Architecture major sketching coffee shops and listening to indie pop. Ask me about my 35mm film camera collection!",
+    name: "Aarav Sharma",
+    age: 22,
+    photo: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=800&q=80",
+    bio: "Architecture major sketching old Delhi coffee spots. Ask me about my 35mm film camera and matcha recipes!",
     location: "IIT Delhi",
-    majorOrWork: "Architecture & Design '25",
-    interests: ["Architecture", "Film Photography", "Indie Music", "Matcha"],
-    prompts: [
-      { question: "A life goal of mine", answer: "Designing an eco-friendly rooftop café in old Delhi." },
-      { question: "Best way to ask me out", answer: "Propose an iced latte tasting and an art gallery walk." }
-    ],
+    majorOrWork: "Architecture '25",
+    interests: ["Architecture", "Film Photography", "Indie Rock", "Matcha"],
     spotifyAnthem: { song: "Mystery of Love", artist: "Sufjan Stevens" },
     hasLikedUser: true
   },
@@ -25,406 +17,372 @@ export const INITIAL_PROFILES: Profile[] = [
     id: "p2",
     name: "Rohan Varma",
     age: 22,
-    photos: [
-      "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80"
-    ],
-    bio: "Building distributed systems by day, curating vinyl playlists by night. Looking for a weekend badminton partner.",
+    photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80",
+    bio: "Building distributed systems by day, making vinyl playlists by night. Looking for a regular badminton doubles partner.",
     location: "BITS Pilani",
     majorOrWork: "Computer Science '24",
     interests: ["Tech", "Badminton", "Vinyl Records", "Anime"],
-    prompts: [
-      { question: "Two truths and a lie", answer: "I run half-marathons, I don't drink caffeine, I built a compiler." }
-    ],
     spotifyAnthem: { song: "Starboy", artist: "The Weeknd" },
     hasLikedUser: false
   },
   {
     id: "p3",
-    name: "Meera Sen",
-    age: 20,
-    photos: [
-      "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=800&q=80"
-    ],
-    bio: "Literature geek who loves old bookstores, monsoon walks in South Bombay, and poetry slams.",
-    location: "St. Xavier's College, Mumbai",
-    majorOrWork: "English Literature",
-    interests: ["Literature", "Poetry", "Thrifting", "Coffee"],
-    prompts: [
-      { question: "I get overly competitive about", answer: "Lit trivia and New York Times crossword puzzles." }
-    ],
-    spotifyAnthem: { song: "Cardigan", artist: "Taylor Swift" },
+    name: "Kabir Mehta",
+    age: 23,
+    photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=80",
+    bio: "Product designer and amateur mixologist. If you appreciate good typography and fresh sourdough, let's talk.",
+    location: "NID Ahmedabad",
+    majorOrWork: "Industrial Design",
+    interests: ["Design", "Mixology", "Typography", "Baking"],
+    spotifyAnthem: { song: "Pink + White", artist: "Frank Ocean" },
     hasLikedUser: true
   },
   {
     id: "p4",
-    name: "Kabir Mehta",
-    age: 23,
-    photos: [
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=80"
-    ],
-    bio: "Product designer & amateur mixologist. If you appreciate good typography and sourdough, we will get along.",
-    location: "NID Ahmedabad",
-    majorOrWork: "Industrial Design",
-    interests: ["Design", "Mixology", "Typography", "Baking"],
-    prompts: [
-      { question: "My simple pleasures", answer: "Fresh warm sourdough with salted butter on rainy Sunday mornings." }
-    ],
-    spotifyAnthem: { song: "Pink + White", artist: "Frank Ocean" },
+    name: "Arjun Nambiar",
+    age: 24,
+    photo: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=800&q=80",
+    bio: "Finance analyst who lives for weekend treks in the Western Ghats. Can brew the best authentic South Indian filter coffee.",
+    location: "Bangalore",
+    majorOrWork: "Fintech Analyst",
+    interests: ["Trekking", "Filter Coffee", "Investing", "Football"],
+    spotifyAnthem: { song: "Yellow", artist: "Coldplay" },
     hasLikedUser: false
   },
   {
     id: "p5",
-    name: "Tara Deshmukh",
-    age: 22,
-    photos: [
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1534751516642-a171ed284c66?auto=format&fit=crop&w=800&q=80"
-    ],
-    bio: "Psychology researcher curious about human habits. Will probably psychoanalyze your Spotify Wrapped.",
-    location: "Ashoka University",
-    majorOrWork: "Cognitive Psychology",
-    interests: ["Psychology", "Podcasts", "Board Games", "Running"],
-    prompts: [
-      { question: "Dating me is like", answer: "Having a built-in podcast recommender and spontaneous bakery visits." }
-    ],
-    spotifyAnthem: { song: "Good Luck, Babe!", artist: "Chappell Roan" },
-    hasLikedUser: true
-  },
-  {
-    id: "p6",
-    name: "Arjun Nambiar",
-    age: 24,
-    photos: [
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=80"
-    ],
-    bio: "Finance analyst who lives for weekend treks in the Western Ghats. Can make the best filter coffee in town.",
-    location: "Bangalore",
-    majorOrWork: "Fintech Analyst",
-    interests: ["Trekking", "Filter Coffee", "Investing", "Football"],
-    hasLikedUser: false
-  },
-  {
-    id: "p7",
-    name: "Diya Kapoor",
-    age: 21,
-    photos: [
-      "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=800&q=80"
-    ],
-    bio: "Classical dancer with a contemporary streetwear obsession. Always down for late-night gelato runs.",
-    location: "Lady Shri Ram College, DU",
-    majorOrWork: "Economics & Dance",
-    interests: ["Kathak", "Streetwear", "Gelato", "Art Galleries"],
-    prompts: [
-      { question: "Never have I ever", answer: "Turned down pistachio gelato or a live music gig." }
-    ],
-    spotifyAnthem: { song: "Levitating", artist: "Dua Lipa" },
-    hasLikedUser: true
-  },
-  {
-    id: "p8",
     name: "Dev Singhania",
     age: 23,
-    photos: [
-      "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=800&q=80"
-    ],
+    photo: "https://images.unsplash.com/photo-1480429370139-e0132c086e2a?auto=format&fit=crop&w=800&q=80",
     bio: "Mechanical engineer building autonomous drones. Formula 1 fanatic — Ferrari heartbreaks only.",
     location: "IIT Bombay",
     majorOrWork: "Robotics & Aero",
     interests: ["Formula 1", "Robotics", "Karting", "Rock Music"],
+    spotifyAnthem: { song: "Do I Wanna Know?", artist: "Arctic Monkeys" },
+    hasLikedUser: true
+  },
+  {
+    id: "p6",
+    name: "Karan Johar",
+    age: 22,
+    photo: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=800&q=80",
+    bio: "Not the director! CS student working on AI agents, hiking, and open mic standup comedy.",
+    location: "IIIT Hyderabad",
+    majorOrWork: "Computer Science '24",
+    interests: ["AI", "Hiking", "Standup Comedy", "Dogs"],
+    spotifyAnthem: { song: "Blinding Lights", artist: "The Weeknd" },
+    hasLikedUser: true
+  },
+  {
+    id: "p7",
+    name: "Zayd Merchant",
+    age: 23,
+    photo: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80",
+    bio: "Culinary explorer and pastry enthusiast. I express love by baking fresh cinnamon rolls on Sundays.",
+    location: "Mumbai",
+    majorOrWork: "Culinary Arts",
+    interests: ["Pastry", "Culinary Arts", "Travel", "Jazz"],
+    spotifyAnthem: { song: "Fly Me to the Moon", artist: "Frank Sinatra" },
+    hasLikedUser: true
+  },
+  {
+    id: "p8",
+    name: "Nikhil Rastogi",
+    age: 24,
+    photo: "https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?auto=format&fit=crop&w=800&q=80",
+    bio: "Product Manager navigating startup chaos. Let's debate iOS vs Android or go for a morning 10k run.",
+    location: "Gurgaon",
+    majorOrWork: "Product Manager",
+    interests: ["Product Management", "Running", "Gadgets", "Craft Beer"],
+    spotifyAnthem: { song: "Circles", artist: "Post Malone" },
     hasLikedUser: false
   },
   {
     id: "p9",
-    name: "Ananya Roy",
-    age: 20,
-    photos: [
-      "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=800&q=80"
-    ],
-    bio: "Journalism student chasing stories and sunset photos. Enthusiastic amateur guitarist.",
-    location: "Jadavpur University, Kolkata",
-    interests: ["Journalism", "Guitar", "Sunsets", "Debating"],
+    name: "Aadit Bansal",
+    age: 22,
+    photo: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=800&q=80",
+    bio: "Economics grad student. Will challenge you to Catan or chess and probably lose gracefully.",
+    location: "Delhi School of Economics",
+    majorOrWork: "Economics",
+    interests: ["Chess", "Economics", "Podcasts", "Cycling"],
+    spotifyAnthem: { song: "Viva La Vida", artist: "Coldplay" },
     hasLikedUser: false
   },
   {
     id: "p10",
-    name: "Karan Johar",
-    age: 22,
-    photos: [
-      "https://images.unsplash.com/photo-1480429370139-e0132c086e2a?auto=format&fit=crop&w=800&q=80"
-    ],
-    bio: "Not the director! CS student working on AI agents, hiking, and standup comedy open mics.",
-    location: "IIIT Hyderabad",
-    majorOrWork: "Computer Science '24",
-    interests: ["AI", "Hiking", "Standup Comedy", "Dogs"],
+    name: "Samir Kulkarni",
+    age: 23,
+    photo: "https://images.unsplash.com/photo-1519052537078-e6302a4968d4?auto=format&fit=crop&w=800&q=80",
+    bio: "Hardware hacker and 3D printing nerd. Always trying to automate things that take 2 seconds manually.",
+    location: "COEP Pune",
+    majorOrWork: "Electrical Eng",
+    interests: ["Hardware", "3D Printing", "Bouldering", "Sci-Fi"],
+    spotifyAnthem: { song: "Harder, Better, Faster, Stronger", artist: "Daft Punk" },
     hasLikedUser: true
   },
   {
     id: "p11",
-    name: "Sanya Mathur",
-    age: 21,
-    photos: [
-      "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=800&q=80"
-    ],
-    bio: "Fashion styling and vintage curation. I know the best hidden thrift spots across Delhi.",
-    location: "NIFT Delhi",
-    interests: ["Thrifting", "Sustainable Fashion", "Photography", "Matcha"],
-    hasLikedUser: false
-  },
-  {
-    id: "p12",
-    name: "Zayd Merchant",
-    age: 23,
-    photos: [
-      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=800&q=80"
-    ],
-    bio: "Culinary explorer and pastry enthusiast. I express love by baking fresh cinnamon rolls on Sundays.",
-    location: "Mumbai",
-    interests: ["Pastry", "Culinary Arts", "Travel", "Jazz"],
+    name: "Vikram Malhotra",
+    age: 25,
+    photo: "https://images.unsplash.com/photo-1463453091185-61582044d556?auto=format&fit=crop&w=800&q=80",
+    bio: "Lawyer in training. Pro-Oxford comma. When not reading contracts, I am playing acoustic guitar.",
+    location: "NLSIU Bangalore",
+    majorOrWork: "Corporate Law",
+    interests: ["Law", "Acoustic Guitar", "Tennis", "Debate"],
+    spotifyAnthem: { song: "Fast Car", artist: "Luke Combs" },
     hasLikedUser: true
   },
   {
+    id: "p12",
+    name: "Yashvardhan Rao",
+    age: 23,
+    photo: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=800&q=80",
+    bio: "Commercial pilot trainee. Can give you cool aerial weather trivia. Huge fan of bouldering and rock.",
+    location: "IGRUA",
+    majorOrWork: "Aviation",
+    interests: ["Aviation", "Bouldering", "Rock Music", "Stargazing"],
+    spotifyAnthem: { song: "Learning to Fly", artist: "Pink Floyd" },
+    hasLikedUser: false
+  },
+  {
     id: "p13",
-    name: "Rhea Iyer",
-    age: 22,
-    photos: [
-      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=800&q=80"
-    ],
-    bio: "Marine biology student who cares more about coral reefs than small talk. Certified scuba diver.",
-    location: "Goa University",
-    interests: ["Scuba Diving", "Marine Biology", "Eco-living", "Surfing"],
+    name: "Pranav Joshi",
+    age: 24,
+    photo: "https://images.unsplash.com/photo-1496345875659-11f7dd282d1d?auto=format&fit=crop&w=800&q=80",
+    bio: "Data scientist working on climate models. Half-marathons, specialty aeropress coffee, and late night drives.",
+    location: "Hyderabad",
+    majorOrWork: "Data Science",
+    interests: ["Marathon", "Climate Tech", "Specialty Coffee", "Driving"],
+    spotifyAnthem: { song: "Midnight City", artist: "M83" },
     hasLikedUser: false
   },
   {
     id: "p14",
-    name: "Nikhil Rastogi",
-    age: 24,
-    photos: [
-      "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80"
-    ],
-    bio: "Product Manager navigating startup chaos. Let us debate iOS vs Android or go for a morning 10k.",
-    location: "Gurgaon",
-    interests: ["Product Management", "Running", "Gadgets", "Craft Beer"],
-    hasLikedUser: false
-  },
-  {
-    id: "p15",
-    name: "Ishita Chawla",
-    age: 21,
-    photos: [
-      "https://images.unsplash.com/photo-1558898479-33c0057a5d12?auto=format&fit=crop&w=800&q=80"
-    ],
-    bio: "Graphic designer who color-coordinates everything. Believer in spontaneity and homemade pasta.",
-    location: "Symbiosis Pune",
-    interests: ["Graphic Design", "Pasta Making", "Illustrations", "Cats"],
+    name: "Madhav Menon",
+    age: 22,
+    photo: "https://images.unsplash.com/photo-1513956589380-bad6acb9b9d4?auto=format&fit=crop&w=800&q=80",
+    bio: "Drummer in a college rock band. Will trade witty banter for authentic street food recommendations.",
+    location: "NIT Trichy",
+    majorOrWork: "Mechanical Eng",
+    interests: ["Drums", "Street Food", "Indie Rock", "Board Games"],
+    spotifyAnthem: { song: "Everlong", artist: "Foo Fighters" },
     hasLikedUser: true
   },
   {
+    id: "p15",
+    name: "Armaan Gill",
+    age: 23,
+    photo: "https://images.unsplash.com/photo-1528892952291-009c663ce843?auto=format&fit=crop&w=800&q=80",
+    bio: "Culinary nomad & street photographer. Believe the world is best experienced one meal at a time.",
+    location: "Chandigarh",
+    majorOrWork: "Photography & Media",
+    interests: ["Street Photography", "Cooking", "Roadtrips", "Dogs"],
+    spotifyAnthem: { song: "Budapest", artist: "George Ezra" },
+    hasLikedUser: false
+  },
+  {
     id: "p16",
-    name: "Aadit Bansal",
-    age: 22,
-    photos: [
-      "https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?auto=format&fit=crop&w=800&q=80"
-    ],
-    bio: "Economics grad student. Will challenge you to Catan or chess and probably lose gracefully.",
-    location: "Delhi School of Economics",
-    interests: ["Chess", "Economics", "Podcasts", "Cycling"],
+    name: "Farhan Ali",
+    age: 23,
+    photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=80",
+    bio: "Theatre actor and slam poet. Enthusiastic about live performances and late-night chai debates.",
+    location: "Jamia Millia Islamia, Delhi",
+    majorOrWork: "Mass Communication",
+    interests: ["Theatre", "Poetry", "Chai", "Debating"],
+    spotifyAnthem: { song: "Riptide", artist: "Vance Joy" },
     hasLikedUser: false
   },
   {
     id: "p17",
-    name: "Tanvi Hegde",
-    age: 20,
-    photos: [
-      "https://images.unsplash.com/photo-1524250502761-1ac6f2e30d43?auto=format&fit=crop&w=800&q=80"
-    ],
-    bio: "Aspiring screenwriter with 40 unfinished Google Docs. Passionate about retro Bollywood and trivia.",
-    location: "Whistling Woods, Mumbai",
-    interests: ["Screenwriting", "Cinema", "Trivia", "Vintage Bollywood"],
-    hasLikedUser: true
-  },
-  {
-    id: "p18",
-    name: "Samir Kulkarni",
-    age: 23,
-    photos: [
-      "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=800&q=80"
-    ],
-    bio: "Hardware hacker, 3D printing nerd. Always trying to automate things that take 2 seconds manually.",
-    location: "COEP Pune",
-    interests: ["Hardware", "3D Printing", "Bouldering", "Sci-Fi"],
+    name: "Tushar Agrawal",
+    age: 24,
+    photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80",
+    bio: "Cybersecurity analyst by day, escape room enthusiast by night. Can you crack the cipher?",
+    location: "Pune",
+    majorOrWork: "Cybersecurity",
+    interests: ["Cybersecurity", "Escape Rooms", "Puzzles", "Coffee"],
+    spotifyAnthem: { song: "The Chain", artist: "Fleetwood Mac" },
     hasLikedUser: false
   },
   {
+    id: "p18",
+    name: "Reyansh Gupta",
+    age: 21,
+    photo: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=800&q=80",
+    bio: "Illustrator and comic book collector. If you want someone to explore graphic novels with, say hi.",
+    location: "Srishti Institute Bangalore",
+    majorOrWork: "Visual Arts",
+    interests: ["Illustration", "Comics", "Skateboarding", "Lofi Music"],
+    spotifyAnthem: { song: "Sunflower", artist: "Post Malone" },
+    hasLikedUser: true
+  },
+  {
     id: "p19",
-    name: "Pooja Bhattacharya",
-    age: 22,
-    photos: [
-      "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=800&q=80"
-    ],
-    bio: "Classical vocalist experimenting with jazz fusion. Tea snob who prefers Darjeeling first flush.",
-    location: "Rabindra Bharati, Kolkata",
-    interests: ["Vocal Music", "Jazz Fusion", "Tea Culture", "Museums"],
+    name: "Dhruv Kapoor",
+    age: 23,
+    photo: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=800&q=80",
+    bio: "Biotech researcher working on microbial genetics. Passionate about plant-based cooking and tennis.",
+    location: "IISc Bangalore",
+    majorOrWork: "Biotechnology",
+    interests: ["Biotech", "Tennis", "Cooking", "Sci-Fi Books"],
+    spotifyAnthem: { song: "Clocks", artist: "Coldplay" },
     hasLikedUser: false
   },
   {
     id: "p20",
-    name: "Vikram Malhotra",
-    age: 25,
-    photos: [
-      "https://images.unsplash.com/photo-1519052537078-e6302a4968d4?auto=format&fit=crop&w=800&q=80"
-    ],
-    bio: "Lawyer in training. Pro-Oxford comma. When not reading contracts, I am playing acoustic guitar.",
-    location: "NLSIU Bangalore",
-    interests: ["Law", "Acoustic Guitar", "Tennis", "Debate"],
+    name: "Ishaan Sen",
+    age: 22,
+    photo: "https://images.unsplash.com/photo-1480429370139-e0132c086e2a?auto=format&fit=crop&w=800&q=80",
+    bio: "Guitarist and sound engineer. Looking for someone who doesn't mind listening to my rough music mixes.",
+    location: "KM Music Conservatory, Chennai",
+    majorOrWork: "Audio Engineering",
+    interests: ["Acoustic Guitar", "Sound Design", "Vinyl", "Coffee"],
+    spotifyAnthem: { song: "Gravity", artist: "John Mayer" },
     hasLikedUser: true
   },
   {
     id: "p21",
-    name: "Kriti Saxena",
-    age: 21,
-    photos: [
-      "https://images.unsplash.com/photo-1567532939604-b6b5b0db2604?auto=format&fit=crop&w=800&q=80"
-    ],
-    bio: "Plant mom with 32 succulents. Studying biotechnology and obsessed with true crime documentaries.",
-    location: "Panjab University, Chandigarh",
-    interests: ["Plants", "True Crime", "Biotech", "Pottery"],
+    name: "Aditya Nair",
+    age: 24,
+    photo: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=800&q=80",
+    bio: "Civil engineer designing smart cities. Weekends are reserved for badminton and experimenting with pasta sauces.",
+    location: "IIT Roorkee",
+    majorOrWork: "Civil Engineering",
+    interests: ["Urban Design", "Badminton", "Pasta", "Cycling"],
+    spotifyAnthem: { song: "Wake Me Up", artist: "Avicii" },
     hasLikedUser: false
   },
   {
     id: "p22",
-    name: "Yashvardhan Rao",
+    name: "Siddharth Roy",
     age: 23,
-    photos: [
-      "https://images.unsplash.com/photo-1463453091185-61582044d556?auto=format&fit=crop&w=800&q=80"
-    ],
-    bio: "Commercial pilot trainee. Can give you cool aerial weather trivia. Huge fan of bouldering and rock.",
-    location: "IGRUA",
-    interests: ["Aviation", "Bouldering", "Rock Music", "Stargazing"],
-    hasLikedUser: false
-  },
-  {
-    id: "p23",
-    name: "Sneha Nair",
-    age: 22,
-    photos: [
-      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=800&q=80",
-      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80"
-    ],
-    bio: "UI/UX enthusiast who critiques real-world door handles. Love ramen and Studio Ghibli films.",
-    location: "NIFT Bangalore",
-    interests: ["UI/UX", "Anime", "Ramen", "Design Systems"],
+    photo: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=800&q=80",
+    bio: "Fintech developer and bookworm. Let's talk about behavioral economics over hot hot chocolate.",
+    location: "Kolkata",
+    majorOrWork: "Fintech",
+    interests: ["Economics", "Hot Chocolate", "Thrifting", "Cinema"],
+    spotifyAnthem: { song: "Take on Me", artist: "a-ha" },
     hasLikedUser: true
   },
   {
-    id: "p24",
-    name: "Pranav Joshi",
-    age: 24,
-    photos: [
-      "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=800&q=80"
-    ],
-    bio: "Data scientist working on climate models. Half-marathons, specialty aeropress, and late night city drives.",
-    location: "Hyderabad",
-    interests: ["Marathon", "Climate Tech", "Specialty Coffee", "Driving"],
+    id: "p23",
+    name: "Harsh Vardhan",
+    age: 22,
+    photo: "https://images.unsplash.com/photo-1501196354995-cbb51c65aaea?auto=format&fit=crop&w=800&q=80",
+    bio: "Aspiring documentary filmmaker. Always carrying a camera and looking for interesting human stories.",
+    location: "FTII Pune",
+    majorOrWork: "Filmmaking",
+    interests: ["Documentaries", "Street Cinema", "Travelling", "Chai"],
+    spotifyAnthem: { song: "Society", artist: "Eddie Vedder" },
     hasLikedUser: false
   },
   {
+    id: "p24",
+    name: "Neil D'Souza",
+    age: 21,
+    photo: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=800&q=80",
+    bio: "Marine conservation volunteer and surfer from Goa. Certified scuba rescue diver.",
+    location: "Goa",
+    majorOrWork: "Marine Studies",
+    interests: ["Surfing", "Scuba Diving", "Ocean Conservation", "Reggae"],
+    spotifyAnthem: { song: "Could You Be Loved", artist: "Bob Marley" },
+    hasLikedUser: true
+  },
+  {
     id: "p25",
-    name: "Avani Patel",
-    age: 20,
-    photos: [
-      "https://images.unsplash.com/photo-1517630800677-932d836ab680?auto=format&fit=crop&w=800&q=80"
-    ],
-    bio: "Fine arts student working with watercolors and ceramics. Looking for a partner for museum dates.",
-    location: "MS University, Baroda",
-    interests: ["Fine Arts", "Ceramics", "Museums", "Sketching"],
+    name: "Kunal Bajaj",
+    age: 24,
+    photo: "https://images.unsplash.com/photo-1519052537078-e6302a4968d4?auto=format&fit=crop&w=800&q=80",
+    bio: "Growth marketer by day, board game strategist by night. Let's play Settlers of Catan or Ticket to Ride.",
+    location: "Gurgaon",
+    majorOrWork: "Marketing",
+    interests: ["Board Games", "Catan", "Fitness", "Podcasts"],
+    spotifyAnthem: { song: "Counting Stars", artist: "OneRepublic" },
     hasLikedUser: false
   },
   {
     id: "p26",
-    name: "Madhav Menon",
+    name: "Varun Chopra",
     age: 22,
-    photos: [
-      "https://images.unsplash.com/photo-1496345875659-11f7dd282d1d?auto=format&fit=crop&w=800&q=80"
-    ],
-    bio: "Drummer in a college rock band. Will trade witty banter for authentic street food recommendations.",
-    location: "NIT Trichy",
-    interests: ["Drums", "Street Food", "Indie Rock", "Board Games"],
+    photo: "https://images.unsplash.com/photo-1463453091185-61582044d556?auto=format&fit=crop&w=800&q=80",
+    bio: "AI researcher focusing on computer vision. In my free time, I love trying new street food and bouldering.",
+    location: "IIIT Bangalore",
+    majorOrWork: "Computer Vision",
+    interests: ["AI", "Bouldering", "Street Food", "Cycling"],
+    spotifyAnthem: { song: "Strobe", artist: "deadmau5" },
     hasLikedUser: true
   },
   {
     id: "p27",
-    name: "Riddhi Jain",
-    age: 21,
-    photos: [
-      "https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=800&q=80"
-    ],
-    bio: "Digital marketing strategist and fitness addict. Morning gym sessions and podcast recommendations.",
-    location: "NMIMS Mumbai",
-    interests: ["Fitness", "Marketing", "Pilates", "Smoothies"],
+    name: "Raghav Goel",
+    age: 23,
+    photo: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=800&q=80",
+    bio: "Product strategist and vinyl enthusiast. Passionate about indie films and architectural photography.",
+    location: "Delhi",
+    majorOrWork: "Strategy",
+    interests: ["Vinyl", "Indie Cinema", "Architecture", "Coffee"],
+    spotifyAnthem: { song: "Heroes", artist: "David Bowie" },
     hasLikedUser: false
   },
   {
     id: "p28",
-    name: "Armaan Gill",
-    age: 23,
-    photos: [
-      "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=800&q=80"
-    ],
-    bio: "Culinary nomad & street photographer. Believe the world is best experienced one meal at a time.",
-    location: "Chandigarh",
-    interests: ["Street Photography", "Cooking", "Roadtrips", "Dogs"],
-    hasLikedUser: false
+    name: "Manav Trivedi",
+    age: 21,
+    photo: "https://images.unsplash.com/photo-1496345875659-11f7dd282d1d?auto=format&fit=crop&w=800&q=80",
+    bio: "Robotics engineer building open-source prosthetics. Huge fan of table tennis and 80s synthwave.",
+    location: "DTU Delhi",
+    majorOrWork: "Robotics",
+    interests: ["Table Tennis", "Synthwave", "Open Source", "Gaming"],
+    spotifyAnthem: { song: "Resonance", artist: "HOME" },
+    hasLikedUser: true
   },
   {
     id: "p29",
-    name: "Simran Kaur",
-    age: 22,
-    photos: [
-      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80"
-    ],
-    bio: "Game developer building cozy pixel art games. Love analog synthesizers and vintage arcade machines.",
-    location: "Delhi Technological University",
-    interests: ["Game Dev", "Pixel Art", "Synths", "Arcades"],
-    hasLikedUser: true
-  },
-  {
-    id: "p30",
-    name: "Farhan Ali",
+    name: "Vivaan Singhal",
     age: 23,
-    photos: [
-      "https://images.unsplash.com/photo-1513956589380-bad6acb9b9d4?auto=format&fit=crop&w=800&q=80"
-    ],
-    bio: "Theatre actor and slam poet. Enthusiastic about live performances and late-night chai debates.",
-    location: "Jamia Millia Islamia, Delhi",
-    interests: ["Theatre", "Poetry", "Chai", "Debating"],
+    photo: "https://images.unsplash.com/photo-1513956589380-bad6acb9b9d4?auto=format&fit=crop&w=800&q=80",
+    bio: "Literature major writing a fantasy novel. Always down for late-night hot cocoa and debating plot twists.",
+    location: "Ashoka University",
+    majorOrWork: "Creative Writing",
+    interests: ["Creative Writing", "Fantasy", "Museums", "Coffee"],
+    spotifyAnthem: { song: "Ophelia", artist: "The Lumineers" },
     hasLikedUser: false
   },
   {
-    id: "p31",
-    name: "Lavanya Reddy",
-    age: 21,
-    photos: [
-      "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80"
-    ],
-    bio: "Aerospace student fascinated by satellite imagery. Constantly daydreaming about zero gravity.",
-    location: "IIT Madras",
-    interests: ["Aerospace", "Stargazing", "Science Fiction", "Badminton"],
+    id: "p30",
+    name: "Tanmay Deshmukh",
+    age: 24,
+    photo: "https://images.unsplash.com/photo-1528892952291-009c663ce843?auto=format&fit=crop&w=800&q=80",
+    bio: "Aerospace engineer calculating orbital trajectories. Looking for someone to stargaze with.",
+    location: "IIT Kanpur",
+    majorOrWork: "Aerospace Eng",
+    interests: ["Astronomy", "Stargazing", "Sci-Fi", "Hiking"],
+    spotifyAnthem: { song: "Space Oddity", artist: "David Bowie" },
     hasLikedUser: true
   },
   {
+    id: "p31",
+    name: "Aman Sehgal",
+    age: 22,
+    photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80",
+    bio: "Psychology researcher curious about how habits form. Let's psychoanalyze your favorite movies.",
+    location: "TISS Mumbai",
+    majorOrWork: "Psychology",
+    interests: ["Psychology", "Cinema", "Podcasts", "Badminton"],
+    spotifyAnthem: { song: "Shrike", artist: "Hozier" },
+    hasLikedUser: false
+  },
+  {
     id: "p32",
-    name: "Tushar Agrawal",
-    age: 24,
-    photos: [
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80"
-    ],
-    bio: "Cybersecurity analyst by day, escape room enthusiast by night. Can you crack the cipher?",
-    location: "Pune",
-    interests: ["Cybersecurity", "Escape Rooms", "Puzzles", "Coffee"],
+    name: "Sahil Bakshi",
+    age: 23,
+    photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=80",
+    bio: "Graphic novelist and animator. Enjoys cozy ramen shops and sketchbook sessions in parks.",
+    location: "Ahmedabad",
+    majorOrWork: "Animation",
+    interests: ["Animation", "Ramen", "Sketching", "Jazz"],
+    spotifyAnthem: { song: "Fly Love", artist: "Jamie Foxx" },
     hasLikedUser: false
   }
 ];

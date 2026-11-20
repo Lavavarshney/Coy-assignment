@@ -2,7 +2,7 @@ export interface Profile {
   id: string;
   name: string;
   age: number;
-  photos: string[];
+  photo: string; // 1 reliable photo per profile
   bio: string;
   location: string;
   majorOrWork?: string;
@@ -19,18 +19,10 @@ export interface SwipeAction {
   timestamp: string;
 }
 
-export interface MatchMessage {
-  id: string;
-  sender: 'user' | 'match';
-  text: string;
-  timestamp: string;
-}
-
 export interface Match {
   id: string;
   profile: Profile;
   matchedAt: string;
-  messages?: MatchMessage[];
 }
 
 export interface DbSchema {

@@ -21,14 +21,14 @@ describe('Coy Discover & Privacy Matching Logic', () => {
   });
 
   test('Matching Rule: Swipe LIKE on a profile that liked user creates a mutual match', () => {
-    // p1 (Aanya Sharma) hasLikedUser: true
+    // p1 (Aarav Sharma) hasLikedUser: true
     const result = recordSwipe('p1', 'like');
     expect(result.isMatch).toBe(true);
 
     const matches = getMatches();
     const found = matches.find(m => m.profile.id === 'p1');
     expect(found).toBeDefined();
-    expect(found?.profile.name).toBe('Aanya Sharma');
+    expect(found?.profile.name).toBe('Aarav Sharma');
   });
 
   test('Privacy Rule: Swipe LIKE on a profile that did NOT like user does NOT create a match', () => {
@@ -89,7 +89,7 @@ describe('Coy Discover & Privacy Matching Logic', () => {
   });
 
   test('Ghost Shield Rule 3: Silently blocking a user instantly purges any active match with zero alerts', () => {
-    // 1. Create a match with Aanya (p1)
+    // 1. Create a match with Aarav (p1)
     recordSwipe('p1', 'like');
     expect(getMatches().find(m => m.profile.id === 'p1')).toBeDefined();
 

@@ -12,7 +12,6 @@ interface SwipeCardProps {
 }
 
 export const SwipeCard: React.FC<SwipeCardProps> = ({ profile, isFront, onSwipe }) => {
-  const [photoIndex, setPhotoIndex] = useState(0);
   const [showDetails, setShowDetails] = useState(false);
   const [isDismissing, setIsDismissing] = useState(false);
 
@@ -27,7 +26,6 @@ export const SwipeCard: React.FC<SwipeCardProps> = ({ profile, isFront, onSwipe 
     setIsDismissing(true);
     const targetX = direction === 'like' ? 600 : -600;
 
-    // Smooth physical flyout animation
     await animate(x, targetX, {
       duration: 0.28,
       ease: [0.32, 0.72, 0, 1],
@@ -47,12 +45,9 @@ export const SwipeCard: React.FC<SwipeCardProps> = ({ profile, isFront, onSwipe 
     } else if (info.offset.x < -swipeThreshold || info.velocity.x < -velocityThreshold) {
       flyOut('pass');
     } else {
-      // Spring smoothly back to center
       animate(x, 0, { type: 'spring', stiffness: 500, damping: 30 });
     }
   };
-
-  const currentPhoto = profile.photos && profile.photos.length > 0 ? profile.photos[photoIndex] : '';
 
   if (!isFront) {
     return (
@@ -65,7 +60,7 @@ export const SwipeCard: React.FC<SwipeCardProps> = ({ profile, isFront, onSwipe 
         <div className="relative w-full h-full flex flex-col pointer-events-none">
           <div className="relative h-[65%] w-full overflow-hidden bg-gray-100">
             <img
-              src={profile.photos?.[0]}
+              src={profile.photo}
               alt={profile.name}
               className="w-full h-full object-cover pointer-events-none"
             />
@@ -115,35 +110,15 @@ export const SwipeCard: React.FC<SwipeCardProps> = ({ profile, isFront, onSwipe 
           <span className="text-2xl font-black text-[#EF4444] tracking-wider uppercase">PASS</span>
         </motion.div>
 
-        {/* Profile Image */}
+        {/* Profile Image (1 high-res photo per profile) */}
         <div className="relative h-[65%] w-full min-h-[350px] shrink-0 overflow-hidden bg-gray-100">
           <img
-            src={currentPhoto}
+            src={profile.photo}
             alt={profile.name}
             draggable={false}
-            className="w-full h-full object-cover pointer-events-none transition-all duration-300"
+            className="w-full h-full object-cover pointer-events-none"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
-
-          {/* Top Story Bar Segments */}
-          {profile.photos && profile.photos.length > 1 && (
-            <div className="absolute top-3 inset-x-3 z-30 flex gap-1.5">
-              {profile.photos.map((_, idx) => (
-                <button
-                  key={idx}
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setPhotoIndex(idx);
-                  }}
-                  className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${
-                    idx === photoIndex ? 'bg-white' : 'bg-white/40 hover:bg-white/70'
-                  }`}
-                  aria-label={`Photo ${idx + 1}`}
-                />
-              ))}
-            </div>
-          )}
 
           {/* Main Card Info Overlay */}
           <div className="absolute bottom-3 left-4 right-4 z-20 text-white flex items-end justify-between pointer-events-none">

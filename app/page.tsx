@@ -153,7 +153,6 @@ export default function App() {
           <MatchesView
             matches={matches}
             onStartSwiping={() => setActiveTab('discover')}
-            onRefreshMatches={fetchData}
           />
         ) : (
           /* Discover Feed */
