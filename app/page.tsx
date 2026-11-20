@@ -12,8 +12,8 @@ import { HomePlaceholder } from '@/components/HomePlaceholder';
 import { TabBar } from '@/components/TabBar';
 import { GhostShieldModal } from '@/components/GhostShieldModal';
 
-const LOCAL_STORAGE_SWIPES_KEY = 'coy_swiped_ids_v2';
-const LOCAL_STORAGE_MATCHES_KEY = 'coy_local_matches_v2';
+const LOCAL_STORAGE_SWIPES_KEY = 'coy_swipes_prod_v1';
+const LOCAL_STORAGE_MATCHES_KEY = 'coy_matches_prod_v1';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<'home' | 'discover' | 'matches'>('discover');
