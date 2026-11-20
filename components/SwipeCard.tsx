@@ -84,10 +84,10 @@ export const SwipeCard: React.FC<SwipeCardProps> = ({ profile, isFront, onSwipe 
       style={{ x: showDetails ? 0 : x, rotate: showDetails ? 0 : rotate }}
       drag={showDetails ? false : "x"}
       dragConstraints={{ left: 0, right: 0 }}
-      dragElastic={0.8}
+      dragElastic={0.9}
       onDragEnd={handleDragEnd}
       whileTap={{ cursor: showDetails ? 'default' : 'grabbing' }}
-      className="absolute inset-0 w-full h-[540px] rounded-3xl bg-white border-2 border-[#1C1C1E] shadow-coy-lg overflow-hidden cursor-grab active:cursor-grabbing select-none touch-none z-10 flex flex-col"
+      className="absolute inset-0 w-full h-[540px] rounded-3xl bg-white border-2 border-[#1C1C1E] shadow-coy-lg overflow-hidden cursor-grab active:cursor-grabbing select-none touch-none z-10 flex flex-col pointer-events-auto"
       initial={{ scale: 0.95, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       exit={{
@@ -97,7 +97,7 @@ export const SwipeCard: React.FC<SwipeCardProps> = ({ profile, isFront, onSwipe 
         transition: { duration: 0.25, ease: 'easeOut' }
       }}
     >
-      <div className="relative w-full h-full flex flex-col overflow-y-auto">
+      <div className="relative w-full h-full flex flex-col pointer-events-auto">
         {/* Swipe Feedback Badges */}
         <motion.div
           style={{ opacity: likeOpacity }}
@@ -124,34 +124,23 @@ export const SwipeCard: React.FC<SwipeCardProps> = ({ profile, isFront, onSwipe 
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
 
-          {/* Story Bar Segments */}
+          {/* Top Story Bar Segments with interactive photo dots */}
           {profile.photos && profile.photos.length > 1 && (
-            <div className="absolute top-3 inset-x-3 z-20 flex gap-1.5 pointer-events-none">
+            <div className="absolute top-3 inset-x-3 z-30 flex gap-1.5 pointer-events-auto">
               {profile.photos.map((_, idx) => (
-                <div
+                <button
                   key={idx}
-                  className={`h-1 flex-1 rounded-full transition-all duration-300 ${
-                    idx === photoIndex ? 'bg-white' : 'bg-white/40'
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setPhotoIndex(idx);
+                  }}
+                  className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${
+                    idx === photoIndex ? 'bg-white' : 'bg-white/40 hover:bg-white/70'
                   }`}
+                  aria-label={`Photo ${idx + 1}`}
                 />
               ))}
             </div>
-          )}
-
-          {/* Left / Right Tap zones for photo navigation */}
-          {profile.photos && profile.photos.length > 1 && (
-            <>
-              <button
-                onClick={prevPhoto}
-                className="absolute inset-y-0 left-0 w-1/3 z-20 opacity-0 cursor-pointer"
-                aria-label="Previous photo"
-              />
-              <button
-                onClick={nextPhoto}
-                className="absolute inset-y-0 right-0 w-1/3 z-20 opacity-0 cursor-pointer"
-                aria-label="Next photo"
-              />
-            </>
           )}
 
           {/* Main Card Info Overlay */}
