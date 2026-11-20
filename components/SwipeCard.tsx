@@ -14,20 +14,25 @@ interface SwipeCardProps {
 export const SwipeCard: React.FC<SwipeCardProps> = ({ profile, isFront, onSwipe }) => {
   const [photoIndex, setPhotoIndex] = useState(0);
   const [showDetails, setShowDetails] = useState(false);
+  const [exitX, setExitX] = useState<number | null>(null);
 
   const x = useMotionValue(0);
-  const rotate = useTransform(x, [-200, 200], [-18, 18]);
+  const rotate = useTransform(x, [-250, 250], [-22, 22]);
 
-  // Opacity of LIKE vs NOPE stamps
-  const likeOpacity = useTransform(x, [20, 90], [0, 1]);
-  const nopeOpacity = useTransform(x, [-90, -20], [1, 0]);
+  // Opacity of LIKE vs PASS stamps
+  const likeOpacity = useTransform(x, [20, 100], [0, 1]);
+  const nopeOpacity = useTransform(x, [-100, -20], [1, 0]);
 
   const handleDragEnd = (_: any, info: any) => {
-    if (showDetails) return; // Prevent swipe while reading details
-    const threshold = 90;
-    if (info.offset.x > threshold) {
+    if (showDetails) return;
+    const threshold = 85;
+    const velocity = info.velocity.x;
+
+    if (info.offset.x > threshold || velocity > 400) {
+      setExitX(400);
       onSwipe('like');
-    } else if (info.offset.x < -threshold) {
+    } else if (info.offset.x < -threshold || velocity < -400) {
+      setExitX(-400);
       onSwipe('pass');
     }
   };
@@ -79,13 +84,18 @@ export const SwipeCard: React.FC<SwipeCardProps> = ({ profile, isFront, onSwipe 
       style={{ x: showDetails ? 0 : x, rotate: showDetails ? 0 : rotate }}
       drag={showDetails ? false : "x"}
       dragConstraints={{ left: 0, right: 0 }}
-      dragElastic={0.7}
+      dragElastic={0.8}
       onDragEnd={handleDragEnd}
       whileTap={{ cursor: showDetails ? 'default' : 'grabbing' }}
       className="absolute inset-0 w-full h-[540px] rounded-3xl bg-white border-2 border-[#1C1C1E] shadow-coy-lg overflow-hidden cursor-grab active:cursor-grabbing select-none touch-none z-10 flex flex-col"
       initial={{ scale: 0.95, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
-      exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
+      exit={{
+        x: exitX !== null ? exitX : 0,
+        opacity: 0,
+        scale: 0.85,
+        transition: { duration: 0.25, ease: 'easeOut' }
+      }}
     >
       <div className="relative w-full h-full flex flex-col overflow-y-auto">
         {/* Swipe Feedback Badges */}

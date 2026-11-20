@@ -625,7 +625,11 @@
       "hasLikedUser": false
     }
   ],
-  "swipes": {},
+  "swipes": {
+    "p1": "pass"
+  },
   "matches": [],
-  "history": []
+  "history": [
+    "p1"
+  ]
 }

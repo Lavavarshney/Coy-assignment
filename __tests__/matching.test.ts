@@ -62,20 +62,4 @@ describe('Coy Discover & Privacy Matching Logic', () => {
     expect(foundInFeed).toBeUndefined();
     expect(updatedFeed.length).toBe(initialFeed.length - 1);
   });
-
-  test('Rewind / Undo Rule: Can undo the last swipe and restore profile to feed', () => {
-    const initialFeed = getFeedProfiles();
-    const firstProfile = initialFeed[0];
-
-    recordSwipe(firstProfile.id, 'like');
-    expect(getFeedProfiles().find(p => p.id === firstProfile.id)).toBeUndefined();
-
-    const rewindRes = rewindLastSwipe();
-    expect(rewindRes.success).toBe(true);
-    expect(rewindRes.unswipedProfile?.id).toBe(firstProfile.id);
-
-    // Profile should now be back in the feed
-    const restoredFeed = getFeedProfiles();
-    expect(restoredFeed.find(p => p.id === firstProfile.id)).toBeDefined();
-  });
 });

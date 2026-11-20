@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
-import { Heart, X, RotateCcw, Flame, Undo2 } from 'lucide-react';
+import { Heart, X, RotateCcw, Flame } from 'lucide-react';
 import { Profile, Match } from '@/types';
 import { SwipeCard } from '@/components/SwipeCard';
 import { MatchModal } from '@/components/MatchModal';
@@ -18,7 +18,6 @@ export default function App() {
   const [loading, setLoading] = useState<boolean>(true);
   const [newMatchProfile, setNewMatchProfile] = useState<Profile | null>(null);
   const [isSwiping, setIsSwiping] = useState<boolean>(false);
-  const [canRewind, setCanRewind] = useState<boolean>(false);
 
   // Initial data fetch
   const fetchData = async () => {
@@ -57,7 +56,6 @@ export default function App() {
     const swipedProfile = feed[0];
     const remaining = feed.slice(1);
     setFeed(remaining);
-    setCanRewind(true);
 
     try {
       const res = await fetch('/api/swipe', {
@@ -85,35 +83,12 @@ export default function App() {
     }
   };
 
-  // Handle Rewind / Undo Last Swipe
-  const handleRewind = async () => {
-    if (!canRewind || isSwiping) return;
-
-    try {
-      const res = await fetch('/api/rewind', { method: 'POST' });
-      const data = await res.json();
-
-      if (data.success && data.profile) {
-        // Prepend restored profile back to the top of feed
-        setFeed([data.profile, ...feed]);
-        setCanRewind(false);
-        // Refresh matches list in case the rewind removed a match
-        const matchesRes = await fetch('/api/matches');
-        const matchesData = await matchesRes.json();
-        if (matchesData.success) setMatches(matchesData.matches || []);
-      }
-    } catch (err) {
-      console.error('Failed to rewind', err);
-    }
-  };
-
   // Reset database demo
   const handleReset = async () => {
     try {
       setLoading(true);
       await fetch('/api/matches', { method: 'POST' });
       await fetchData();
-      setCanRewind(false);
     } catch (err) {
       console.error('Failed to reset', err);
     } finally {
@@ -200,8 +175,8 @@ export default function App() {
                   </AnimatePresence>
                 </div>
 
-                {/* Bottom Desktop/Tap Action Controls (Pass, Rewind, Like) */}
-                <div className="flex justify-center items-center gap-5 mt-3">
+                {/* Bottom Desktop/Tap Action Buttons: Hidden on mobile (drag gestures only), visible on desktop md+ */}
+                <div className="hidden md:flex justify-center items-center gap-6 mt-3">
                   {/* Pass Button */}
                   <button
                     onClick={() => handleSwipe('pass')}
@@ -210,17 +185,6 @@ export default function App() {
                     aria-label="Pass"
                   >
                     <X className="w-7 h-7 stroke-[2.7] group-hover:scale-110 transition-transform" />
-                  </button>
-
-                  {/* Rewind / Undo Button */}
-                  <button
-                    onClick={handleRewind}
-                    disabled={!canRewind || isSwiping}
-                    className="w-11 h-11 rounded-full bg-white border-2 border-[#1C1C1E] shadow-coy hover:bg-amber-50 text-amber-500 flex items-center justify-center active:shadow-coy-active active:translate-y-0.5 transition-all disabled:opacity-30 disabled:pointer-events-none"
-                    aria-label="Rewind last swipe"
-                    title="Undo last swipe"
-                  >
-                    <Undo2 className="w-5 h-5 stroke-[2.5]" />
                   </button>
 
                   {/* Like Button */}
