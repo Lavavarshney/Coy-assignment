@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ShieldCheck, X, EyeOff, CheckCircle2 } from 'lucide-react';
+import { INITIAL_PROFILES } from '@/data/profiles';
 
 interface GhostShieldModalProps {
   isOpen: boolean;
@@ -12,7 +13,7 @@ interface GhostShieldModalProps {
 
 export const GhostShieldModal: React.FC<GhostShieldModalProps> = ({ isOpen, onClose, onBlockSuccess }) => {
   const [blockedIds, setBlockedIds] = useState<string[]>([]);
-  const [targetId, setTargetId] = useState('p1'); // Default to Aanya to test instant match purge
+  const [targetId, setTargetId] = useState('p1'); // Default to Aarav (p1)
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
   const fetchBlocked = async () => {
@@ -43,7 +44,9 @@ export const GhostShieldModal: React.FC<GhostShieldModalProps> = ({ isOpen, onCl
       });
       const data = await res.json();
       if (data.success) {
-        setStatusMessage(`User "${targetId}" silently added to Ghost Shield!`);
+        const profile = INITIAL_PROFILES.find(p => p.id === targetId);
+        const name = profile ? profile.name : targetId;
+        setStatusMessage(`"${name}" (${targetId}) silently added to Ghost Shield!`);
         await fetchBlocked();
         onBlockSuccess();
       }
@@ -92,7 +95,7 @@ export const GhostShieldModal: React.FC<GhostShieldModalProps> = ({ isOpen, onCl
           {/* Test Action */}
           <div className="space-y-3">
             <label className="text-xs font-bold text-gray-700 block">
-              Test Silent Block on Profile:
+              Select Profile to Silently Block:
             </label>
             <div className="flex gap-2">
               <select
@@ -100,17 +103,19 @@ export const GhostShieldModal: React.FC<GhostShieldModalProps> = ({ isOpen, onCl
                 onChange={(e) => setTargetId(e.target.value)}
                 className="flex-1 bg-white border-2 border-[#1C1C1E] rounded-xl px-3 py-2 text-xs font-bold text-gray-800 shadow-coy-sm focus:outline-none"
               >
-                <option value="p1">Aanya Sharma (p1)</option>
-                <option value="p2">Rohan Varma (p2)</option>
-                <option value="p3">Meera Sen (p3)</option>
-                <option value="p32">Tushar Agrawal (p32 - Pre-blocked)</option>
+                {INITIAL_PROFILES.slice(0, 10).map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.name} ({p.id})
+                  </option>
+                ))}
+                <option value="p32">Sahil Bakshi (p32 - Pre-blocked)</option>
               </select>
 
               <button
                 onClick={handleSilentBlock}
                 className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs rounded-xl border-2 border-[#1C1C1E] shadow-coy-sm active:shadow-coy-active active:translate-y-0.5 transition-all"
               >
-                Silent Block
+                Block
               </button>
             </div>
 
@@ -122,20 +127,24 @@ export const GhostShieldModal: React.FC<GhostShieldModalProps> = ({ isOpen, onCl
             )}
           </div>
 
-          {/* Currently Blocked IDs List */}
+          {/* Currently Blocked List */}
           <div className="mt-4 pt-3 border-t border-gray-100">
             <p className="text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-2">
               Silently Blocked Registry ({blockedIds.length})
             </p>
             <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto">
-              {blockedIds.map((id) => (
-                <span
-                  key={id}
-                  className="px-2 py-0.5 bg-gray-100 border border-gray-200 rounded-full text-[10px] font-bold text-gray-700"
-                >
-                  {id}
-                </span>
-              ))}
+              {blockedIds.map((id) => {
+                const profile = INITIAL_PROFILES.find(p => p.id === id);
+                return (
+                  <span
+                    key={id}
+                    className="px-2.5 py-1 bg-gray-100 border border-gray-200 rounded-full text-[10px] font-bold text-gray-700 flex items-center gap-1"
+                  >
+                    <span>{profile ? profile.name : id}</span>
+                    <span className="text-[9px] text-gray-400">({id})</span>
+                  </span>
+                );
+              })}
             </div>
           </div>
 
