@@ -2,7 +2,7 @@ export interface Profile {
   id: string;
   name: string;
   age: number;
-  photos: string[]; // Multi-photo Instagram story support
+  photos: string[];
   bio: string;
   location: string;
   majorOrWork?: string;
@@ -10,6 +10,7 @@ export interface Profile {
   prompts?: { question: string; answer: string }[];
   spotifyAnthem?: { song: string; artist: string };
   hasLikedUser: boolean; // Server-only, stripped before sending to client
+  isBlocked?: boolean;   // Ghost / Anti-stalker registry flag
 }
 
 export interface SwipeAction {
@@ -36,5 +37,6 @@ export interface DbSchema {
   profiles: Profile[];
   swipes: Record<string, 'like' | 'pass'>;
   matches: Match[];
-  history: string[]; // IDs in swipe order for Rewind/Undo capability
+  blockedUserIds: string[]; // Ghost / Silent Block Registry
+  history?: string[];
 }

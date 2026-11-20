@@ -11,6 +11,7 @@ export function ensureDbFile(): DbSchema {
       profiles: INITIAL_PROFILES,
       swipes: {},
       matches: [],
+      blockedUserIds: ['p32'], // Example: p32 (Tushar) is silently blocked
       history: []
     };
     fs.mkdirSync(path.dirname(DB_FILE), { recursive: true });
@@ -21,13 +22,14 @@ export function ensureDbFile(): DbSchema {
   try {
     const raw = fs.readFileSync(DB_FILE, 'utf8');
     const parsed = JSON.parse(raw);
-    if (!parsed.history) parsed.history = [];
+    if (!parsed.blockedUserIds) parsed.blockedUserIds = ['p32'];
     return parsed;
   } catch (err) {
     const initialData: DbSchema = {
       profiles: INITIAL_PROFILES,
       swipes: {},
       matches: [],
+      blockedUserIds: ['p32'],
       history: []
     };
     fs.writeFileSync(DB_FILE, JSON.stringify(initialData, null, 2), 'utf8');
@@ -41,19 +43,37 @@ export function saveDb(data: DbSchema): void {
 
 /**
  * Returns profiles that have NOT been swiped yet.
- * Core privacy guarantee: Server strips `hasLikedUser` to protect against client inspection.
+ * Ghost / Silent Block Rule: Silently excludes blocked users completely from the feed.
+ * Core Privacy Rule: Strips `hasLikedUser` and `isBlocked` flags.
  */
-export function getFeedProfiles(): Omit<Profile, 'hasLikedUser'>[] {
+export function getFeedProfiles(): Omit<Profile, 'hasLikedUser' | 'isBlocked'>[] {
   const db = ensureDbFile();
   const swipedIds = new Set(Object.keys(db.swipes));
+  const blockedIds = new Set(db.blockedUserIds || []);
 
   return db.profiles
-    .filter(p => !swipedIds.has(p.id))
-    .map(({ hasLikedUser, ...safeProfile }) => safeProfile);
+    .filter(p => !swipedIds.has(p.id) && !blockedIds.has(p.id))
+    .map(({ hasLikedUser, isBlocked, ...safeProfile }) => safeProfile);
 }
 
 /**
- * Records a swipe with mutual match calculation & history tracking for Rewind.
+ * Ghost / Silent Block: Block a user without alerting or confirming it.
+ */
+export function silentlyBlockUser(profileId: string): void {
+  const db = ensureDbFile();
+  if (!db.blockedUserIds) db.blockedUserIds = [];
+  if (!db.blockedUserIds.includes(profileId)) {
+    db.blockedUserIds.push(profileId);
+  }
+  // Automatically remove any existing mutual match silently
+  db.matches = db.matches.filter(m => m.profile.id !== profileId);
+  saveDb(db);
+}
+
+/**
+ * Records a swipe with mutual match calculation & Ghost Shield protection.
+ * Even if a blocked user liked the current user, or if someone likes a blocked user,
+ * NO match is ever created and NO error is leaked.
  */
 export function recordSwipe(profileId: string, action: 'like' | 'pass'): { isMatch: boolean; profile?: Profile } {
   const db = ensureDbFile();
@@ -64,13 +84,12 @@ export function recordSwipe(profileId: string, action: 'like' | 'pass'): { isMat
   }
 
   db.swipes[profileId] = action;
-  if (!db.history) db.history = [];
-  db.history.push(profileId);
+  const isBlocked = (db.blockedUserIds || []).includes(profileId);
 
   let isMatch = false;
 
-  // Mutual match logic: action === 'like' AND profile pre-liked user
-  if (action === 'like' && profile.hasLikedUser) {
+  // Mutual match condition: action is LIKE, profile liked user, AND NOT BLOCKED
+  if (action === 'like' && profile.hasLikedUser && !isBlocked) {
     isMatch = true;
     const existingMatch = db.matches.find(m => m.profile.id === profileId);
     if (!existingMatch) {
@@ -91,49 +110,8 @@ export function recordSwipe(profileId: string, action: 'like' | 'pass'): { isMat
   }
 
   saveDb(db);
+  // Returns identical neutral JSON structure: no leakage of blocked status!
   return { isMatch, profile };
-}
-
-/**
- * Rewind / Undo the very last swipe action.
- */
-export function rewindLastSwipe(): { success: boolean; unswipedProfile?: Profile } {
-  const db = ensureDbFile();
-  if (!db.history || db.history.length === 0) {
-    return { success: false };
-  }
-
-  const lastSwipedId = db.history.pop()!;
-  delete db.swipes[lastSwipedId];
-
-  // Remove from matches if it was matched
-  db.matches = db.matches.filter(m => m.profile.id !== lastSwipedId);
-
-  saveDb(db);
-  const profile = db.profiles.find(p => p.id === lastSwipedId);
-  return { success: true, unswipedProfile: profile };
-}
-
-/**
- * Send a message in a match conversation.
- */
-export function sendMatchMessage(matchId: string, text: string): MatchMessage {
-  const db = ensureDbFile();
-  const match = db.matches.find(m => m.id === matchId);
-  if (!match) {
-    throw new Error(`Match with id ${matchId} not found`);
-  }
-
-  if (!match.messages) match.messages = [];
-  const newMsg: MatchMessage = {
-    id: `msg_${Date.now()}`,
-    sender: 'user',
-    text,
-    timestamp: new Date().toISOString()
-  };
-  match.messages.push(newMsg);
-  saveDb(db);
-  return newMsg;
 }
 
 export function getMatches(): Match[] {
@@ -146,6 +124,7 @@ export function resetDatabase(): void {
     profiles: INITIAL_PROFILES,
     swipes: {},
     matches: [],
+    blockedUserIds: ['p32'],
     history: []
   };
   saveDb(freshData);

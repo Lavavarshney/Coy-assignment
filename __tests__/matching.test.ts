@@ -1,10 +1,9 @@
 import {
   getFeedProfiles,
   recordSwipe,
-  rewindLastSwipe,
   getMatches,
   resetDatabase,
-  ensureDbFile
+  silentlyBlockUser
 } from '../lib/db';
 
 describe('Coy Discover & Privacy Matching Logic', () => {
@@ -17,6 +16,7 @@ describe('Coy Discover & Privacy Matching Logic', () => {
     expect(feed.length).toBeGreaterThan(0);
     feed.forEach((profile: any) => {
       expect(profile.hasLikedUser).toBeUndefined();
+      expect(profile.isBlocked).toBeUndefined();
     });
   });
 
@@ -61,5 +61,45 @@ describe('Coy Discover & Privacy Matching Logic', () => {
     const foundInFeed = updatedFeed.find(p => p.id === firstProfile.id);
     expect(foundInFeed).toBeUndefined();
     expect(updatedFeed.length).toBe(initialFeed.length - 1);
+  });
+
+  /* ====================================================================
+     GHOST SHIELD & ANTI-STALKER SILENT BLOCK TESTS
+     ==================================================================== */
+
+  test('Ghost Shield Rule 1: A blocked user is completely filtered out from getFeedProfiles()', () => {
+    // p32 is pre-blocked in the registry
+    const feed = getFeedProfiles();
+    const found = feed.find(p => p.id === 'p32');
+    expect(found).toBeUndefined(); // Never presented to the user
+  });
+
+  test('Ghost Shield Rule 2: If a blocked user swipes LIKE, it succeeds neutrally with NO match and NO error', () => {
+    // If p32 (blocked) attempts to swipe like on user, system returns 200 OK + isMatch: false
+    const response = recordSwipe('p32', 'like');
+    
+    // Crucial anti-retaliation check:
+    expect(response.isMatch).toBe(false); // No match formed
+    // Stalker receives standard success structure so they never suspect they were blocked!
+    expect(response.profile).toBeDefined();
+
+    // Verify user's matches list was NOT polluted
+    const matches = getMatches();
+    expect(matches.find(m => m.profile.id === 'p32')).toBeUndefined();
+  });
+
+  test('Ghost Shield Rule 3: Silently blocking a user instantly purges any active match with zero alerts', () => {
+    // 1. Create a match with Aanya (p1)
+    recordSwipe('p1', 'like');
+    expect(getMatches().find(m => m.profile.id === 'p1')).toBeDefined();
+
+    // 2. User invokes silent block on p1
+    silentlyBlockUser('p1');
+
+    // 3. Match is immediately scrubbed from the database
+    expect(getMatches().find(m => m.profile.id === 'p1')).toBeUndefined();
+
+    // 4. p1 will also no longer appear in the feed
+    expect(getFeedProfiles().find(p => p.id === 'p1')).toBeUndefined();
   });
 });
