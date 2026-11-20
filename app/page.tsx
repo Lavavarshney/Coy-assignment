@@ -12,8 +12,8 @@ import { HomePlaceholder } from '@/components/HomePlaceholder';
 import { TabBar } from '@/components/TabBar';
 import { GhostShieldModal } from '@/components/GhostShieldModal';
 
-const LOCAL_STORAGE_SWIPES_KEY = 'coy_swiped_ids_v1';
-const LOCAL_STORAGE_MATCHES_KEY = 'coy_local_matches_v1';
+const LOCAL_STORAGE_SWIPES_KEY = 'coy_swiped_ids_v2';
+const LOCAL_STORAGE_MATCHES_KEY = 'coy_local_matches_v2';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<'home' | 'discover' | 'matches'>('discover');
@@ -24,7 +24,19 @@ export default function App() {
   const [isSwiping, setIsSwiping] = useState<boolean>(false);
   const [showGhostShield, setShowGhostShield] = useState<boolean>(false);
 
-  // Initial data fetch + Client-side reload persistence reconciliation
+  // Synchronous initial state recovery from localStorage so reload NEVER flickers to 0 matches
+  useEffect(() => {
+    try {
+      const savedMatches = JSON.parse(localStorage.getItem(LOCAL_STORAGE_MATCHES_KEY) || '[]');
+      if (Array.isArray(savedMatches) && savedMatches.length > 0) {
+        setMatches(savedMatches);
+      }
+    } catch (e) {
+      console.warn('LocalStorage error:', e);
+    }
+  }, []);
+
+  // Comprehensive data fetch & reconciliation
   const fetchData = async () => {
     try {
       setLoading(true);
@@ -39,29 +51,26 @@ export default function App() {
       let clientSwipedIds: string[] = [];
       let clientLocalMatches: Match[] = [];
 
-      if (typeof window !== 'undefined') {
-        try {
-          clientSwipedIds = JSON.parse(localStorage.getItem(LOCAL_STORAGE_SWIPES_KEY) || '[]');
-          clientLocalMatches = JSON.parse(localStorage.getItem(LOCAL_STORAGE_MATCHES_KEY) || '[]');
-        } catch (e) {
-          console.warn('Could not read from localStorage', e);
-        }
-      }
+      try {
+        clientSwipedIds = JSON.parse(localStorage.getItem(LOCAL_STORAGE_SWIPES_KEY) || '[]');
+        clientLocalMatches = JSON.parse(localStorage.getItem(LOCAL_STORAGE_MATCHES_KEY) || '[]');
+      } catch (e) {}
 
       const swipedSet = new Set(clientSwipedIds);
 
       if (feedData.success && feedData.profiles) {
-        // Filter out any profiles swiped in this client session
         const filteredFeed = feedData.profiles.filter((p: Profile) => !swipedSet.has(p.id));
         setFeed(filteredFeed);
       }
 
-      // Merge server matches with local client matches
-      const combinedMatchesMap = new Map<string, Match>();
-      (matchesData.matches || []).forEach((m: Match) => combinedMatchesMap.set(m.profile.id, m));
-      clientLocalMatches.forEach((m: Match) => combinedMatchesMap.set(m.profile.id, m));
+      // Robust union of server matches + local client matches (Never drops matches on reload!)
+      const matchMap = new Map<string, Match>();
+      clientLocalMatches.forEach((m: Match) => matchMap.set(m.profile.id, m));
+      (matchesData.matches || []).forEach((m: Match) => matchMap.set(m.profile.id, m));
 
-      setMatches(Array.from(combinedMatchesMap.values()));
+      const consolidatedMatches = Array.from(matchMap.values());
+      setMatches(consolidatedMatches);
+      localStorage.setItem(LOCAL_STORAGE_MATCHES_KEY, JSON.stringify(consolidatedMatches));
     } catch (err) {
       console.error('Failed to load Coy data', err);
     } finally {
@@ -82,18 +91,14 @@ export default function App() {
     const remaining = feed.slice(1);
     setFeed(remaining);
 
-    // 1. Immediately persist swipe to localStorage so page refresh NEVER resets the card
-    if (typeof window !== 'undefined') {
-      try {
-        const existing: string[] = JSON.parse(localStorage.getItem(LOCAL_STORAGE_SWIPES_KEY) || '[]');
-        if (!existing.includes(swipedProfile.id)) {
-          existing.push(swipedProfile.id);
-          localStorage.setItem(LOCAL_STORAGE_SWIPES_KEY, JSON.stringify(existing));
-        }
-      } catch (e) {
-        console.warn(e);
+    // 1. Immediately persist swipe to localStorage
+    try {
+      const existing: string[] = JSON.parse(localStorage.getItem(LOCAL_STORAGE_SWIPES_KEY) || '[]');
+      if (!existing.includes(swipedProfile.id)) {
+        existing.push(swipedProfile.id);
+        localStorage.setItem(LOCAL_STORAGE_SWIPES_KEY, JSON.stringify(existing));
       }
-    }
+    } catch (e) {}
 
     try {
       // 2. Synchronize with backend API
@@ -117,11 +122,9 @@ export default function App() {
 
         setMatches(prev => {
           const nextMatches = [newMatchObj, ...prev.filter(m => m.profile.id !== matched.id)];
-          if (typeof window !== 'undefined') {
-            try {
-              localStorage.setItem(LOCAL_STORAGE_MATCHES_KEY, JSON.stringify(nextMatches));
-            } catch (e) {}
-          }
+          try {
+            localStorage.setItem(LOCAL_STORAGE_MATCHES_KEY, JSON.stringify(nextMatches));
+          } catch (e) {}
           return nextMatches;
         });
       }
@@ -138,10 +141,8 @@ export default function App() {
   const handleReset = async () => {
     try {
       setLoading(true);
-      if (typeof window !== 'undefined') {
-        localStorage.removeItem(LOCAL_STORAGE_SWIPES_KEY);
-        localStorage.removeItem(LOCAL_STORAGE_MATCHES_KEY);
-      }
+      localStorage.removeItem(LOCAL_STORAGE_SWIPES_KEY);
+      localStorage.removeItem(LOCAL_STORAGE_MATCHES_KEY);
       await fetch('/api/matches', { method: 'POST' });
       await fetchData();
     } catch (err) {
