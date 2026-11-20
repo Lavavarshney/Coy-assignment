@@ -1,0 +1,136 @@
+'use client';
+
+import React from 'react';
+import { motion, useMotionValue, useTransform } from 'framer-motion';
+import { MapPin, Heart, X, Sparkles } from 'lucide-react';
+import { Profile } from '../types';
+
+interface SwipeCardProps {
+  profile: Profile;
+  isFront: boolean;
+  onSwipe: (action: 'like' | 'pass') => void;
+}
+
+export const SwipeCard: React.FC<SwipeCardProps> = ({ profile, isFront, onSwipe }) => {
+  const x = useMotionValue(0);
+  const rotate = useTransform(x, [-200, 200], [-18, 18]);
+
+  // Opacity of LIKE vs NOPE stamps
+  const likeOpacity = useTransform(x, [20, 90], [0, 1]);
+  const nopeOpacity = useTransform(x, [-90, -20], [1, 0]);
+
+  const handleDragEnd = (_: any, info: any) => {
+    const threshold = 100;
+    if (info.offset.x > threshold) {
+      onSwipe('like');
+    } else if (info.offset.x < -threshold) {
+      onSwipe('pass');
+    }
+  };
+
+  if (!isFront) {
+    return (
+      <div 
+        className="absolute inset-0 w-full h-[520px] rounded-3xl bg-[#FFF9F6] border-2 border-[#1C1C1E] shadow-coy overflow-hidden select-none pointer-events-none scale-[0.94] translate-y-3 opacity-90 transition-all duration-300"
+      >
+        <div className="relative w-full h-full flex flex-col">
+          <div className="relative h-[68%] w-full overflow-hidden bg-gray-100">
+            <img
+              src={profile.photo}
+              alt={profile.name}
+              className="w-full h-full object-cover pointer-events-none"
+            />
+          </div>
+          <div className="p-4 bg-white flex-1 flex flex-col justify-between">
+            <div>
+              <div className="flex items-baseline gap-2">
+                <h3 className="text-xl font-bold text-[#1C1C1E]">{profile.name}</h3>
+                <span className="text-lg font-semibold text-gray-500">{profile.age}</span>
+              </div>
+              <p className="text-xs text-gray-500 flex items-center gap-1 mt-0.5">
+                <MapPin className="w-3.5 h-3.5 text-coy-pink" />
+                {profile.location}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <motion.div
+      style={{ x, rotate }}
+      drag="x"
+      dragConstraints={{ left: 0, right: 0 }}
+      dragElastic={0.7}
+      onDragEnd={handleDragEnd}
+      whileTap={{ cursor: 'grabbing' }}
+      className="absolute inset-0 w-full h-[520px] rounded-3xl bg-white border-2 border-[#1C1C1E] shadow-coy-lg overflow-hidden cursor-grab active:cursor-grabbing select-none touch-none z-10"
+      initial={{ scale: 0.95, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.2 } }}
+    >
+      <div className="relative w-full h-full flex flex-col">
+        {/* Swipe Feedback Badges */}
+        <motion.div
+          style={{ opacity: likeOpacity }}
+          className="absolute top-6 left-6 z-30 pointer-events-none rotate-[-15deg] border-4 border-[#10B981] bg-emerald-500/10 backdrop-blur-sm px-4 py-1.5 rounded-xl flex items-center gap-1.5"
+        >
+          <Heart className="w-6 h-6 text-[#10B981] fill-[#10B981]" />
+          <span className="text-2xl font-black text-[#10B981] tracking-wider uppercase">LIKE</span>
+        </motion.div>
+
+        <motion.div
+          style={{ opacity: nopeOpacity }}
+          className="absolute top-6 right-6 z-30 pointer-events-none rotate-[15deg] border-4 border-[#EF4444] bg-red-500/10 backdrop-blur-sm px-4 py-1.5 rounded-xl flex items-center gap-1.5"
+        >
+          <X className="w-6 h-6 text-[#EF4444] stroke-[3]" />
+          <span className="text-2xl font-black text-[#EF4444] tracking-wider uppercase">PASS</span>
+        </motion.div>
+
+        {/* Profile Image with subtle overlay */}
+        <div className="relative h-[65%] w-full overflow-hidden bg-gray-100">
+          <img
+            src={profile.photo}
+            alt={profile.name}
+            className="w-full h-full object-cover pointer-events-none"
+            loading="eager"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+          
+          {/* Quick info overlaid on bottom of picture */}
+          <div className="absolute bottom-3 left-4 right-4 text-white">
+            <div className="flex items-baseline gap-2">
+              <h2 className="text-2xl font-black drop-shadow-md">{profile.name}</h2>
+              <span className="text-xl font-bold opacity-90">{profile.age}</span>
+            </div>
+            <p className="text-xs font-medium text-gray-200 flex items-center gap-1 mt-0.5">
+              <MapPin className="w-3.5 h-3.5 text-coy-pink" />
+              {profile.location}
+            </p>
+          </div>
+        </div>
+
+        {/* Bio & Interests */}
+        <div className="p-4 bg-white flex-1 flex flex-col justify-between">
+          <p className="text-xs text-gray-700 leading-relaxed font-medium line-clamp-3">
+            {profile.bio}
+          </p>
+
+          <div className="flex flex-wrap gap-1.5 mt-2">
+            {profile.interests.map((interest) => (
+              <span
+                key={interest}
+                className="text-[11px] font-semibold bg-[#F4F4F6] text-gray-800 px-2.5 py-1 rounded-full border border-gray-200 flex items-center gap-1"
+              >
+                <Sparkles className="w-3 h-3 text-coy-pink" />
+                {interest}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
