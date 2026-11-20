@@ -627,11 +627,181 @@
   ],
   "swipes": {
     "p1": "pass",
-    "p2": "like"
+    "p2": "like",
+    "p3": "like",
+    "p4": "like",
+    "p5": "like",
+    "p6": "like",
+    "p7": "like",
+    "p8": "like",
+    "p9": "like",
+    "p10": "like"
   },
-  "matches": [],
+  "matches": [
+    {
+      "id": "match_1795173934486_p3",
+      "profile": {
+        "id": "p3",
+        "name": "Meera Sen",
+        "age": 20,
+        "photos": [
+          "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=800&q=80"
+        ],
+        "bio": "Literature geek who loves old bookstores, monsoon walks in South Bombay, and poetry slams.",
+        "location": "St. Xavier's College, Mumbai",
+        "majorOrWork": "English Literature",
+        "interests": [
+          "Literature",
+          "Poetry",
+          "Thrifting",
+          "Coffee"
+        ],
+        "prompts": [
+          {
+            "question": "I get overly competitive about",
+            "answer": "Lit trivia and New York Times crossword puzzles."
+          }
+        ],
+        "spotifyAnthem": {
+          "song": "Cardigan",
+          "artist": "Taylor Swift"
+        },
+        "hasLikedUser": true
+      },
+      "matchedAt": "2026-11-20T11:25:34.486Z",
+      "messages": [
+        {
+          "id": "msg_init_1795173934497",
+          "sender": "match",
+          "text": "Hey! So glad we matched on Coy! 😊",
+          "timestamp": "2026-11-20T11:25:34.497Z"
+        }
+      ]
+    },
+    {
+      "id": "match_1795173960434_p5",
+      "profile": {
+        "id": "p5",
+        "name": "Tara Deshmukh",
+        "age": 22,
+        "photos": [
+          "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1534751516642-a171ed284c66?auto=format&fit=crop&w=800&q=80"
+        ],
+        "bio": "Psychology researcher curious about human habits. Will probably psychoanalyze your Spotify Wrapped.",
+        "location": "Ashoka University",
+        "majorOrWork": "Cognitive Psychology",
+        "interests": [
+          "Psychology",
+          "Podcasts",
+          "Board Games",
+          "Running"
+        ],
+        "prompts": [
+          {
+            "question": "Dating me is like",
+            "answer": "Having a built-in podcast recommender and spontaneous bakery visits."
+          }
+        ],
+        "spotifyAnthem": {
+          "song": "Good Luck, Babe!",
+          "artist": "Chappell Roan"
+        },
+        "hasLikedUser": true
+      },
+      "matchedAt": "2026-11-20T11:26:00.434Z",
+      "messages": [
+        {
+          "id": "msg_init_1795173960434",
+          "sender": "match",
+          "text": "Hey! So glad we matched on Coy! 😊",
+          "timestamp": "2026-11-20T11:26:00.434Z"
+        }
+      ]
+    },
+    {
+      "id": "match_1795173977169_p7",
+      "profile": {
+        "id": "p7",
+        "name": "Diya Kapoor",
+        "age": 21,
+        "photos": [
+          "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80",
+          "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=800&q=80"
+        ],
+        "bio": "Classical dancer with a contemporary streetwear obsession. Always down for late-night gelato runs.",
+        "location": "Lady Shri Ram College, DU",
+        "majorOrWork": "Economics & Dance",
+        "interests": [
+          "Kathak",
+          "Streetwear",
+          "Gelato",
+          "Art Galleries"
+        ],
+        "prompts": [
+          {
+            "question": "Never have I ever",
+            "answer": "Turned down pistachio gelato or a live music gig."
+          }
+        ],
+        "spotifyAnthem": {
+          "song": "Levitating",
+          "artist": "Dua Lipa"
+        },
+        "hasLikedUser": true
+      },
+      "matchedAt": "2026-11-20T11:26:17.169Z",
+      "messages": [
+        {
+          "id": "msg_init_1795173977178",
+          "sender": "match",
+          "text": "Hey! So glad we matched on Coy! 😊",
+          "timestamp": "2026-11-20T11:26:17.178Z"
+        }
+      ]
+    },
+    {
+      "id": "match_1795173997529_p10",
+      "profile": {
+        "id": "p10",
+        "name": "Karan Johar",
+        "age": 22,
+        "photos": [
+          "https://images.unsplash.com/photo-1480429370139-e0132c086e2a?auto=format&fit=crop&w=800&q=80"
+        ],
+        "bio": "Not the director! CS student working on AI agents, hiking, and standup comedy open mics.",
+        "location": "IIIT Hyderabad",
+        "majorOrWork": "Computer Science '24",
+        "interests": [
+          "AI",
+          "Hiking",
+          "Standup Comedy",
+          "Dogs"
+        ],
+        "hasLikedUser": true
+      },
+      "matchedAt": "2026-11-20T11:26:37.529Z",
+      "messages": [
+        {
+          "id": "msg_init_1795173997529",
+          "sender": "match",
+          "text": "Hey! So glad we matched on Coy! 😊",
+          "timestamp": "2026-11-20T11:26:37.529Z"
+        }
+      ]
+    }
+  ],
   "history": [
     "p1",
-    "p2"
+    "p2",
+    "p3",
+    "p4",
+    "p5",
+    "p6",
+    "p7",
+    "p8",
+    "p9",
+    "p10"
   ]
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, useMotionValue, useTransform } from 'framer-motion';
+import { motion, useMotionValue, useTransform, PanInfo } from 'framer-motion';
 import { MapPin, Heart, X, Sparkles, Music, Info, GraduationCap, ChevronDown } from 'lucide-react';
 import { Profile } from '../types';
 
@@ -14,40 +14,27 @@ interface SwipeCardProps {
 export const SwipeCard: React.FC<SwipeCardProps> = ({ profile, isFront, onSwipe }) => {
   const [photoIndex, setPhotoIndex] = useState(0);
   const [showDetails, setShowDetails] = useState(false);
-  const [exitX, setExitX] = useState<number | null>(null);
+  const [swiped, setSwiped] = useState(false);
 
   const x = useMotionValue(0);
-  const rotate = useTransform(x, [-250, 250], [-22, 22]);
+  const rotate = useTransform(x, [-250, 250], [-25, 25]);
 
-  // Opacity of LIKE vs PASS stamps
-  const likeOpacity = useTransform(x, [20, 100], [0, 1]);
-  const nopeOpacity = useTransform(x, [-100, -20], [1, 0]);
+  // Visual opacity of the stamps
+  const likeOpacity = useTransform(x, [15, 90], [0, 1]);
+  const passOpacity = useTransform(x, [-90, -15], [1, 0]);
 
-  const handleDragEnd = (_: any, info: any) => {
-    if (showDetails) return;
-    const threshold = 85;
-    const velocity = info.velocity.x;
+  const handleDragEnd = (_: any, info: PanInfo) => {
+    if (showDetails || swiped) return;
 
-    if (info.offset.x > threshold || velocity > 400) {
-      setExitX(400);
+    const swipeThreshold = 75;
+    const velocityThreshold = 250;
+
+    if (info.offset.x > swipeThreshold || info.velocity.x > velocityThreshold) {
+      setSwiped(true);
       onSwipe('like');
-    } else if (info.offset.x < -threshold || velocity < -400) {
-      setExitX(-400);
+    } else if (info.offset.x < -swipeThreshold || info.velocity.x < -velocityThreshold) {
+      setSwiped(true);
       onSwipe('pass');
-    }
-  };
-
-  const nextPhoto = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (photoIndex < (profile.photos?.length || 1) - 1) {
-      setPhotoIndex(photoIndex + 1);
-    }
-  };
-
-  const prevPhoto = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (photoIndex > 0) {
-      setPhotoIndex(photoIndex - 1);
     }
   };
 
@@ -56,7 +43,7 @@ export const SwipeCard: React.FC<SwipeCardProps> = ({ profile, isFront, onSwipe 
   if (!isFront) {
     return (
       <div className="absolute inset-0 w-full h-[540px] rounded-3xl bg-[#FFF9F6] border-2 border-[#1C1C1E] shadow-coy overflow-hidden select-none pointer-events-none scale-[0.94] translate-y-3 opacity-90 transition-all duration-300">
-        <div className="relative w-full h-full flex flex-col">
+        <div className="relative w-full h-full flex flex-col pointer-events-none">
           <div className="relative h-[65%] w-full overflow-hidden bg-gray-100">
             <img
               src={profile.photos?.[0]}
@@ -86,50 +73,46 @@ export const SwipeCard: React.FC<SwipeCardProps> = ({ profile, isFront, onSwipe 
       dragConstraints={{ left: 0, right: 0 }}
       dragElastic={0.9}
       onDragEnd={handleDragEnd}
-      whileTap={{ cursor: showDetails ? 'default' : 'grabbing' }}
-      className="absolute inset-0 w-full h-[540px] rounded-3xl bg-white border-2 border-[#1C1C1E] shadow-coy-lg overflow-hidden cursor-grab active:cursor-grabbing select-none touch-none z-10 flex flex-col pointer-events-auto"
+      className="absolute inset-0 w-full h-[540px] rounded-3xl bg-white border-2 border-[#1C1C1E] shadow-coy-lg overflow-hidden cursor-grab active:cursor-grabbing select-none z-10 flex flex-col"
       initial={{ scale: 0.95, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
-      exit={{
-        x: exitX !== null ? exitX : 0,
-        opacity: 0,
-        scale: 0.85,
-        transition: { duration: 0.25, ease: 'easeOut' }
-      }}
+      exit={{ opacity: 0, scale: 0.85, transition: { duration: 0.2 } }}
     >
-      <div className="relative w-full h-full flex flex-col pointer-events-auto">
+      <div className="relative w-full h-full flex flex-col">
         {/* Swipe Feedback Badges */}
         <motion.div
           style={{ opacity: likeOpacity }}
-          className="absolute top-6 left-6 z-30 pointer-events-none rotate-[-15deg] border-4 border-[#10B981] bg-emerald-500/10 backdrop-blur-sm px-4 py-1.5 rounded-xl flex items-center gap-1.5"
+          className="absolute top-6 left-6 z-30 pointer-events-none rotate-[-15deg] border-4 border-[#10B981] bg-emerald-500/10 backdrop-blur-sm px-4 py-1.5 rounded-xl flex items-center gap-1.5 shadow-sm"
         >
           <Heart className="w-6 h-6 text-[#10B981] fill-[#10B981]" />
           <span className="text-2xl font-black text-[#10B981] tracking-wider uppercase">LIKE</span>
         </motion.div>
 
         <motion.div
-          style={{ opacity: nopeOpacity }}
-          className="absolute top-6 right-6 z-30 pointer-events-none rotate-[15deg] border-4 border-[#EF4444] bg-red-500/10 backdrop-blur-sm px-4 py-1.5 rounded-xl flex items-center gap-1.5"
+          style={{ opacity: passOpacity }}
+          className="absolute top-6 right-6 z-30 pointer-events-none rotate-[15deg] border-4 border-[#EF4444] bg-red-500/10 backdrop-blur-sm px-4 py-1.5 rounded-xl flex items-center gap-1.5 shadow-sm"
         >
           <X className="w-6 h-6 text-[#EF4444] stroke-[3]" />
           <span className="text-2xl font-black text-[#EF4444] tracking-wider uppercase">PASS</span>
         </motion.div>
 
-        {/* Profile Image with Instagram Story Tap Zones */}
+        {/* Profile Image */}
         <div className="relative h-[65%] w-full min-h-[350px] shrink-0 overflow-hidden bg-gray-100">
           <img
             src={currentPhoto}
             alt={profile.name}
+            draggable={false}
             className="w-full h-full object-cover pointer-events-none transition-all duration-300"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
 
-          {/* Top Story Bar Segments with interactive photo dots */}
+          {/* Top Story Bar Segments */}
           {profile.photos && profile.photos.length > 1 && (
-            <div className="absolute top-3 inset-x-3 z-30 flex gap-1.5 pointer-events-auto">
+            <div className="absolute top-3 inset-x-3 z-30 flex gap-1.5">
               {profile.photos.map((_, idx) => (
                 <button
                   key={idx}
+                  type="button"
                   onClick={(e) => {
                     e.stopPropagation();
                     setPhotoIndex(idx);
@@ -144,7 +127,7 @@ export const SwipeCard: React.FC<SwipeCardProps> = ({ profile, isFront, onSwipe 
           )}
 
           {/* Main Card Info Overlay */}
-          <div className="absolute bottom-3 left-4 right-4 z-20 text-white flex items-end justify-between">
+          <div className="absolute bottom-3 left-4 right-4 z-20 text-white flex items-end justify-between pointer-events-none">
             <div>
               <div className="flex items-baseline gap-2">
                 <h2 className="text-2xl font-black drop-shadow-md">{profile.name}</h2>
@@ -164,11 +147,12 @@ export const SwipeCard: React.FC<SwipeCardProps> = ({ profile, isFront, onSwipe 
 
             {/* Expand / Details Toggle Button */}
             <button
+              type="button"
               onClick={(e) => {
                 e.stopPropagation();
                 setShowDetails(!showDetails);
               }}
-              className="p-2 rounded-full bg-white/20 backdrop-blur-md border border-white/40 text-white hover:bg-white/30 transition-all cursor-pointer"
+              className="p-2 rounded-full bg-white/20 backdrop-blur-md border border-white/40 text-white hover:bg-white/30 transition-all pointer-events-auto cursor-pointer"
               title="View full profile"
             >
               {showDetails ? <ChevronDown className="w-4 h-4" /> : <Info className="w-4 h-4" />}
@@ -176,13 +160,12 @@ export const SwipeCard: React.FC<SwipeCardProps> = ({ profile, isFront, onSwipe 
           </div>
         </div>
 
-        {/* Bio & Extended Details Sheet */}
-        <div className="p-4 bg-white flex-1 flex flex-col justify-between">
+        {/* Bio & Details */}
+        <div className="p-4 bg-white flex-1 flex flex-col justify-between pointer-events-none">
           <p className="text-xs text-gray-700 leading-relaxed font-medium">
             {profile.bio}
           </p>
 
-          {/* Spotify Anthem if present */}
           {profile.spotifyAnthem && (
             <div className="my-2 p-2.5 rounded-xl bg-[#1DB954]/10 border border-[#1DB954]/30 flex items-center gap-2.5">
               <div className="w-7 h-7 rounded-full bg-[#1DB954] flex items-center justify-center shrink-0">
@@ -197,7 +180,6 @@ export const SwipeCard: React.FC<SwipeCardProps> = ({ profile, isFront, onSwipe 
             </div>
           )}
 
-          {/* Prompts Q&A when expanded */}
           {showDetails && profile.prompts && profile.prompts.length > 0 && (
             <div className="space-y-2 my-2">
               {profile.prompts.map((p, i) => (
@@ -209,7 +191,6 @@ export const SwipeCard: React.FC<SwipeCardProps> = ({ profile, isFront, onSwipe 
             </div>
           )}
 
-          {/* Interests Tags */}
           <div className="flex flex-wrap gap-1.5 mt-2">
             {profile.interests.map((interest) => (
               <span
