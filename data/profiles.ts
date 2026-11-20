@@ -311,7 +311,8 @@ export const INITIAL_PROFILES: Profile[] = [
     name: "Sneha Nair",
     age: 22,
     photos: [
-      "https://images.unsplash.com/photo-1534751516642-a171ed284c66?auto=format&fit=crop&w=800&q=80"
+      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80"
     ],
     bio: "UI/UX enthusiast who critiques real-world door handles. Love ramen and Studio Ghibli films.",
     location: "NIFT Bangalore",
