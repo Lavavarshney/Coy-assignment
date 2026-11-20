@@ -3,23 +3,65 @@
 
 ---
 
-## 🌟 1. Overview & Architecture
+## 🌟 1. Overview
+A standalone, production-ready swipe discovery feature built for **Coy** (`https://app.getcoy.com`). It extends Coy's secret-crush value proposition with a fluid, mobile-first card discovery experience (similar to Bumble and Tinder) while strictly enforcing Coy's core brand promise: **Zero Social Exposure & Complete Mutual Privacy**.
 
-This repository contains a standalone, production-ready implementation of the **"Discover"** tab for **Coy** (`https://app.getcoy.com`). It extends Coy's core secret-crush value proposition with a fluid, mobile-first swipe discovery mechanism (similar to Bumble and Tinder) while rigorously upholding Coy's defining brand promise: **Zero Social Exposure & Complete Mutual Privacy**.
+---
 
-The project is architected as a cohesive full-stack web application built to mirror the craftsmanship, aesthetic language, and privacy rigor of a live consumer mobile application.
+## 🏗️ 2. Project Architecture
+
+The application is structured into decoupled presentation, motion, and domain persistence layers designed for performance, zero-leak privacy, and serverless reliability:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     FRONTEND / CLIENT                       │
+│  ┌──────────────────────────┐  ┌─────────────────────────┐  │
+│  │     Discover Feed UI     │  │     Matches View UI     │  │
+│  │ (Framer Motion Gestures) │  │ (Instant Mutual Badges) │  │
+│  └─────────────┬────────────┘  └────────────┬────────────┘  │
+│                │                            │               │
+│                ▼                            ▼               │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │   Dual-Layer Client Persistence (localStorage Cache)  │  │
+│  │    - Prevents reload reset in serverless environments │  │
+│  └──────────────────────────┬────────────────────────────┘  │
+└─────────────────────────────┼───────────────────────────────┘
+                              │ HTTP JSON API
+                              ▼
+┌─────────────────────────────────────────────────────────────┐
+│                 BACKEND / NEXT.JS API ROUTES                │
+│  ┌──────────────┐  ┌──────────────┐  ┌───────────────────┐  │
+│  │  GET /feed   │  │  POST /swipe │  │   GET /matches    │  │
+│  │ (Sanitized)  │  │ (Match Calc) │  │ (Confirmed Pairs) │  │
+│  └──────┬───────┘  └──────┬───────┘  └─────────┬─────────┘  │
+│         │                 │                    │            │
+│         ▼                 ▼                    ▼            │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │               DOMAIN DATA ACCESS (lib/db.ts)          │  │
+│  │   • Zero-Knowledge Stripping (Deletes hasLikedUser)   │  │
+│  │   • Ghost Shield Silent Block Registry (Anti-Stalker) │  │
+│  │   • Permanent Deduplication & Matching Logic          │  │
+│  └──────────────────────────┬────────────────────────────┘  │
+│                             │                               │
+│                             ▼                               │
+│  ┌───────────────────────────────────────────────────────┐  │
+│  │         PERSISTENCE LAYER (/tmp/coy_db.json)          │  │
+│  │     - Disk storage with in-memory resilient fallback  │  │
+│  └───────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────┘
+```
 
 ### 🛠️ Tech Stack
-* **Frontend Framework:** Next.js 14 (App Router), React 18, TypeScript
-* **Styling & Design System:** Tailwind CSS with custom Neo-Brutalist design tokens (Hot Pink `#FF2B6D`, Coy Vanilla `#FAF8F5`, chunky borders `border-2 border-[#1C1C1E]`, drop-shadows `shadow-coy`)
-* **Motion & Touch Engine:** Framer Motion (gesture physics, card drag constraints, velocity fling exit animations, stamp badge opacity interpolation) + Canvas Confetti
-* **Backend:** Next.js Serverless Route Handlers (`/api/feed`, `/api/swipe`, `/api/matches`, `/api/block`)
-* **Data Persistence:** Dual-layer persistence architecture (server-side JSON storage at `/tmp/coy_db.json` with synchronous client-side reconciliation) designed specifically to handle serverless cold boots and ephemeral environments
+* **Framework:** Next.js 14 (App Router), React 18, TypeScript
+* **Styling:** Tailwind CSS with custom Neo-Brutalist design tokens (Hot Pink `#FF2B6D`, Coy Vanilla `#FAF8F5`, chunky borders `border-2 border-[#1C1C1E]`, drop-shadows `shadow-coy`)
+* **Motion & Touch Engine:** Framer Motion (gesture physics, velocity fling exit animations, stamp opacity interpolation) + Canvas Confetti
+* **Backend:** Next.js Route Handlers (`/api/feed`, `/api/swipe`, `/api/matches`, `/api/block`)
+* **Persistence:** Dual-layer persistence architecture (server-side JSON storage at `/tmp/coy_db.json` with synchronous client-side reconciliation) designed specifically to handle serverless cold boots and ephemeral environments
 * **Test Suite:** Automated Jest testing suite (`ts-jest`) validating matching algorithms and zero-leak privacy rules
 
 ---
 
-## 📋 2. Assignment Requirements Matrix
+## 📋 3. Assignment Requirements Matrix
 
 Every single functional requirement outlined in the prompt has been implemented and strictly adhered to:
 
@@ -39,7 +81,7 @@ Every single functional requirement outlined in the prompt has been implemented 
 
 ---
 
-## 🚀 3. What Extra Has Been Done (Going Beyond the Prompt)
+## 🚀 4. What Extra Has Been Done (Going Beyond the Prompt)
 
 To demonstrate the product polish expected in a high-performing SDE role, the following enhancements were built into the codebase:
 
@@ -58,7 +100,7 @@ To demonstrate the product polish expected in a high-performing SDE role, the fo
 
 ---
 
-## 🧠 4. Engineering Philosophy & Role Alignment
+## 🧠 5. Engineering Philosophy & Role Alignment
 
 The assignment prompt specifically notes:
 > *"This assignment mirrors the work you would do in the role: understanding a live consumer product, thinking about its privacy edge cases, and writing clean, tested backend logic."*
@@ -103,22 +145,6 @@ PASS __tests__/matching.test.ts
 Test Suites: 1 passed, 1 total
 Tests:       8 passed, 8 total
 ```
-
----
-
-## 💡 5. Part A: Two Core Feature Suggestions for Coy
-
-Based on direct exploration of Coy's production app (`https://app.getcoy.com`):
-
-### Feature 1: "Silent Slot Reclaim (Dormant Activity Timeout)"
-* **The Problem:** Users receive only 3 crush slots by default. If an added contact does not have the app, ignores the SMS, or has switched numbers, that slot is permanently burned. Users experience anxiety over "wasting" slots and frequently churn when their 3 slots sit dormant.
-* **The Solution:** If an added crush has not signed up or taken action within 14 days, the user automatically gets their slot back. Coy preserves a cryptographic hash of the phone number in a dormant backend registry: if that person eventually signs up months later and adds the user, a retro-match is still triggered.
-* **Why Required:** Solves slot anxiety, drives long-term retention, and keeps active viral loops spinning without spamming SMS notifications.
-
-### Feature 2: "Campus / Workplace Zero-Knowledge Verification Radar"
-* **The Problem:** Cold anonymous SMS messages (*"Someone has a crush on you on Coy"*) often get ignored as phishing or spam due to total lack of context.
-* **The Solution:** Allow users to optionally verify their university or company email (`.edu`, `@*.ac.in`). When someone receives an anonymous crush alert, it displays: *"Someone from [IIT Delhi / BITS Pilani] has a crush on you"*, with zero individual identity revealed.
-* **Why Required:** Shared context dramatically increases SMS click-through and signup conversion, leverages existing college network effects, and remains 100% compliant with Coy's zero-exposure privacy promise.
 
 ---
 
