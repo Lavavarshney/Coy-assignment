@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
-import { Heart, X, RotateCcw, Flame, ShieldCheck } from 'lucide-react';
+import { Heart, X, Flame, ShieldCheck } from 'lucide-react';
 import { Profile, Match } from '@/types';
 import { SwipeCard } from '@/components/SwipeCard';
 import { MatchModal } from '@/components/MatchModal';
@@ -137,21 +137,6 @@ export default function App() {
     }
   };
 
-  // Reset database demo
-  const handleReset = async () => {
-    try {
-      setLoading(true);
-      localStorage.removeItem(LOCAL_STORAGE_SWIPES_KEY);
-      localStorage.removeItem(LOCAL_STORAGE_MATCHES_KEY);
-      await fetch('/api/matches', { method: 'POST' });
-      await fetchData();
-    } catch (err) {
-      console.error('Failed to reset', err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <div className="flex-1 flex flex-col h-full bg-[#FAF8F5]">
       {/* Top Header - Coy Brand Bar */}
@@ -181,14 +166,6 @@ export default function App() {
             <ShieldCheck className="w-4 h-4 text-purple-600" />
             <span className="hidden sm:inline">Shield</span>
           </button>
-
-          <button
-            onClick={handleReset}
-            title="Reset demo data"
-            className="p-1.5 rounded-xl border border-gray-200 text-gray-500 hover:text-black hover:bg-gray-100 transition-colors"
-          >
-            <RotateCcw className="w-4 h-4" />
-          </button>
         </div>
       </header>
 
@@ -213,7 +190,6 @@ export default function App() {
           <div className="flex-1 flex flex-col justify-between p-4 pb-24 relative">
             {feed.length === 0 ? (
               <EmptyFeed
-                onReset={handleReset}
                 matchesCount={matches.length}
                 onViewMatches={() => setActiveTab('matches')}
               />

@@ -1,17 +1,16 @@
 'use client';
 
 import React from 'react';
-import { Sparkles, RotateCcw, CheckCircle2 } from 'lucide-react';
+import { Sparkles, CheckCircle2 } from 'lucide-react';
 
 interface EmptyFeedProps {
-  onReset: () => void;
   matchesCount: number;
   onViewMatches: () => void;
 }
 
-export const EmptyFeed: React.FC<EmptyFeedProps> = ({ onReset, matchesCount, onViewMatches }) => {
+export const EmptyFeed: React.FC<EmptyFeedProps> = ({ matchesCount, onViewMatches }) => {
   return (
-    <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
+    <div className="flex-1 flex flex-col items-center justify-center p-8 text-center animate-fadeIn">
       <div className="relative mb-6">
         <div className="w-24 h-24 rounded-3xl bg-[#EEEBFF] border-2 border-[#1C1C1E] shadow-coy flex items-center justify-center rotate-[-4deg]">
           <CheckCircle2 className="w-12 h-12 text-[#6C5CE7]" />
@@ -30,8 +29,8 @@ export const EmptyFeed: React.FC<EmptyFeedProps> = ({ onReset, matchesCount, onV
         <span className="font-bold text-coy-pink">{matchesCount}</span> mutual match{matchesCount === 1 ? '' : 'es'}.
       </p>
 
-      <div className="flex flex-col gap-3 mt-8 w-full max-w-xs">
-        {matchesCount > 0 && (
+      {matchesCount > 0 && (
+        <div className="mt-8 w-full max-w-xs">
           <button
             onClick={onViewMatches}
             className="w-full py-3.5 px-5 bg-coy-pink text-white font-bold rounded-2xl border-2 border-[#1C1C1E] shadow-coy hover:bg-coy-pinkHover active:shadow-coy-active active:translate-y-0.5 text-sm transition-all flex items-center justify-center gap-2"
@@ -39,16 +38,8 @@ export const EmptyFeed: React.FC<EmptyFeedProps> = ({ onReset, matchesCount, onV
             <Sparkles className="w-4 h-4 fill-white" />
             <span>View Your Matches ({matchesCount})</span>
           </button>
-        )}
-
-        <button
-          onClick={onReset}
-          className="w-full py-3 px-5 bg-white text-gray-700 font-bold rounded-2xl border-2 border-[#1C1C1E] shadow-coy hover:bg-gray-50 active:shadow-coy-active active:translate-y-0.5 text-xs transition-all flex items-center justify-center gap-2"
-        >
-          <RotateCcw className="w-3.5 h-3.5" />
-          <span>Reset Demo Profiles (Start Over)</span>
-        </button>
-      </div>
+        </div>
+      )}
     </div>
   );
 };
